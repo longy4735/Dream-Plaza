@@ -1,0 +1,1362 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <style>
+        /* 情绪按钮样式 */
+        .mood-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .mood-btn:hover {
+            transform: scale(1.1);
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .mood-btn.selected {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            box-shadow: 0 0 15px rgba(109, 40, 217, 0.5);
+            transform: scale(1.1);
+        }
+    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>梦境日记 | 梦境广场</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Sans+SC:wght@300;400;500;700&display=swap"
+        rel="stylesheet">
+    <style>
+        /* 保持与其他页面相同的样式 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #6d28d9;
+            --secondary: #8b5cf6;
+            --dark: #0f172a;
+            --light: #f8fafc;
+            --accent: #c4b5fd;
+            --text: #1e293b;
+        }
+
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            color: var(--light);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+            padding-bottom: 60px;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                radial-gradient(circle at 15% 20%, rgba(139, 92, 246, 0.1), transparent 25%),
+                radial-gradient(circle at 85% 30%, rgba(199, 210, 254, 0.1), transparent 25%),
+                radial-gradient(circle at 50% 70%, rgba(124, 58, 237, 0.1), transparent 30%);
+            z-index: -1;
+        }
+
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background-color: white;
+            border-radius: 50%;
+            animation: twinkle var(--duration, 4s) infinite var(--delay, 0s);
+        }
+
+        @keyframes twinkle {
+            0%,
+            100% {
+                opacity: 0.2;
+            }
+
+            50% {
+                opacity: 1;
+            }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            padding: 20px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--light);
+            text-decoration: none;
+            font-family: 'Ma Shan Zheng', cursive;
+        }
+
+        .logo i {
+            color: var(--accent);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+
+        nav a {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 18px;
+            transition: all 0.3s ease;
+            position: relative;
+            padding-bottom: 5px;
+        }
+
+        nav a:hover {
+            color: white;
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            transition: width 0.3s ease;
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        .dream-journal-section {
+            padding: 80px 0;
+        }
+
+        .section-title {
+            font-size: 40px;
+            margin-bottom: 60px;
+            font-family: 'Ma Shan Zheng', cursive;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: '📔';
+            position: absolute;
+            top: -25px;
+            right: -35px;
+            font-size: 26px;
+            animation: spin 6s linear infinite;
+        }
+
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .journal-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+
+        .create-journal-btn {
+            padding: 12px 25px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border-radius: 50px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .create-journal-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(109, 40, 217, 0.3);
+        }
+
+        .filter-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .filter-tag {
+            padding: 8px 20px;
+            background: rgba(30, 41, 59, 0.6);
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 15px;
+        }
+
+        .filter-tag:hover,
+        .filter-tag.active {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+        }
+
+        .calendar-container {
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(124, 58, 237, 0.2);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 40px;
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .calendar-title {
+            font-size: 22px;
+            font-weight: 500;
+        }
+
+        .calendar-nav {
+            display: flex;
+            gap: 15px;
+        }
+
+        .calendar-nav button {
+            background: none;
+            border: none;
+            color: var(--accent);
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .calendar-nav button:hover {
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+        }
+
+        .calendar-day {
+            aspect-ratio: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 5px;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .calendar-day:hover:not(.empty) {
+            background: rgba(139, 92, 246, 0.2);
+        }
+
+        .calendar-day.empty {
+            opacity: 0.3;
+            cursor: default;
+        }
+
+        .calendar-day.has-journal::after {
+            content: '';
+            position: absolute;
+            bottom: 5px;
+            width: 5px;
+            height: 5px;
+            background: var(--accent);
+            border-radius: 50%;
+        }
+
+        .calendar-day.today {
+            background: rgba(139, 92, 246, 0.3);
+            border: 1px solid var(--accent);
+        }
+
+        .calendar-day.selected {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+        }
+
+        .journal-list {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 25px;
+        }
+
+        .journal-card {
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(124, 58, 237, 0.2);
+            border-radius: 20px;
+            padding: 25px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .journal-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(139, 92, 246, 0.5);
+            box-shadow: 0 10px 25px rgba(109, 40, 217, 0.2);
+        }
+
+        .journal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .journal-date {
+            color: var(--accent);
+            font-size: 14px;
+        }
+
+        .journal-title {
+            font-size: 22px;
+            margin-bottom: 10px;
+            color: white;
+        }
+
+        .journal-content {
+            color: #cbd5e1;
+            line-height: 1.8;
+            margin-bottom: 15px;
+            max-height: 120px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .journal-content::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 40px;
+            background: linear-gradient(to bottom, transparent, rgba(15, 23, 42, 0.8));
+        }
+
+        .journal-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .journal-tag {
+            padding: 5px 12px;
+            background: rgba(139, 92, 246, 0.1);
+            border-radius: 20px;
+            font-size: 13px;
+            color: #cbd5e1;
+        }
+
+        .journal-actions {
+            display: flex;
+            gap: 15px;
+        }
+
+        .journal-action {
+            background: none;
+            border: none;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .journal-action:hover {
+            color: var(--accent);
+            transform: translateY(-1px);
+        }
+
+        /* 模态框样式 */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(5px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+            border-radius: 20px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow: auto;
+            transform: scale(0.9);
+            transition: all 0.3s ease;
+        }
+
+        .modal.active .modal-content {
+            transform: scale(1);
+        }
+
+        .modal-header {
+            padding: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(124, 58, 237, 0.1);
+        }
+
+        .modal-title {
+            font-size: 24px;
+            font-weight: 500;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            color: #94a3b8;
+            font-size: 24px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .close-modal:hover {
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .modal-body {
+            padding: 25px;
+        }
+
+        .journal-form-group {
+            margin-bottom: 25px;
+        }
+
+        .journal-form-label {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .journal-form-input,
+        .journal-form-textarea {
+            width: 100%;
+            padding: 15px;
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(124, 58, 237, 0.2);
+            border-radius: 10px;
+            color: var(--light);
+            font-size: 16px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .journal-form-textarea {
+            min-height: 200px;
+            resize: vertical;
+        }
+
+        .journal-form-input:focus,
+        .journal-form-textarea:focus {
+            border-color: rgba(139, 92, 246, 0.5);
+            box-shadow: 0 0 15px rgba(109, 40, 217, 0.2);
+        }
+
+        .tag-input-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding: 10px;
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(124, 58, 237, 0.2);
+            border-radius: 10px;
+        }
+
+        .tag-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 5px 10px;
+            background: rgba(139, 92, 246, 0.2);
+            border-radius: 20px;
+            color: var(--accent);
+        }
+
+        .remove-tag {
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .tag-input {
+            flex: 1;
+            min-width: 100px;
+            background: none;
+            border: none;
+            color: var(--light);
+            font-size: 16px;
+            outline: none;
+        }
+
+        .modal-footer {
+            padding: 25px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+            border-top: 1px solid rgba(124, 58, 237, 0.1);
+        }
+
+        .modal-button {
+            padding: 12px 25px;
+            border-radius: 50px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 16px;
+        }
+
+        .cancel-button {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--accent);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+        }
+
+        .cancel-button:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .save-button {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+        }
+
+        .save-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(109, 40, 217, 0.3);
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px 0;
+            color: #94a3b8;
+            border-top: 1px solid rgba(124, 58, 237, 0.1);
+            margin-top: 60px;
+        }
+
+        @media (max-width: 900px) {
+            nav ul {
+                gap: 15px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .section-title {
+                font-size: 32px;
+            }
+
+            .logo {
+                font-size: 24px;
+            }
+
+            .journal-actions {
+                flex-direction: column;
+                gap: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 动态星星背景 -->
+    <div class="stars" id="stars"></div>
+
+    <div class="container">
+        <!-- 导航栏 -->
+        <header>
+            <a href="梦境广场.html" class="logo">
+                <i class="fas fa-cloud-moon"></i>
+                梦境广场
+            </a>
+            <nav>
+                <ul>
+                    <li><a href="梦境广场.html">首页</a></li>
+                    <li><a href="夜梦奇遇.html">夜梦奇遇</a></li>
+                    <li><a href="梦旅指南.html">梦旅指南</a></li>
+                    <li><a href="奇幻碎片.html">奇幻碎片</a></li>
+                    <li><a href="同频共振.html">同频共振</a></li>
+                    <li><a href="关于我们.html">关于我们</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <!-- 梦境日记区域 -->
+        <section class="dream-journal-section">
+            <h2 class="section-title">梦境日记</h2>
+
+            <div class="journal-actions">
+                <button class="create-journal-btn" id="createJournalBtn">
+                    <i class="fas fa-plus"></i> 记录新梦境
+                </button>
+
+                <div class="filter-options">
+                    <div class="filter-tag active" data-filter="all">全部</div>
+                    <div class="filter-tag" data-filter="week">本周</div>
+                    <div class="filter-tag" data-filter="month">本月</div>
+                    <div class="filter-tag" data-filter="important">重要</div>
+                    <div class="filter-tag" data-filter="strange">奇怪</div>
+                    <div class="filter-tag" data-filter="recurring">重复</div>
+                </div>
+            </div>
+
+            <div class="calendar-container">
+                <div class="calendar-header">
+                    <div class="calendar-title" id="calendarTitle">2023年7月</div>
+                    <div class="calendar-nav">
+                        <button id="prevMonth">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <button id="todayBtn">
+                            <i class="fas fa-calendar-day"></i>
+                        </button>
+                        <button id="nextMonth">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="calendar-grid" id="calendarGrid">
+                    <!-- 日历将通过JavaScript动态生成 -->
+                </div>
+            </div>
+
+            <div class="journal-list" id="journalList">
+                <!-- 日记列表将通过JavaScript动态生成 -->
+            </div>
+        </section>
+    </div>
+
+    <!-- 页脚 -->
+    <footer>
+        <div class="container">
+            <p>© 2025 梦境广场 | 你的潜意识栖息地 ✨</p>
+            <p>在清醒世界的边缘，我们守护每一段奇幻旅程</p>
+        </div>
+    </footer>
+
+    <!-- 新建/编辑梦境日记模态框 -->
+    <div class="modal" id="journalModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title" id="modalTitle">记录新梦境</div>
+                <button class="close-modal" id="closeModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="journalForm">
+                    <div class="journal-form-group">
+                        <label class="journal-form-label" for="journalTitle">梦境标题</label>
+                        <input type="text" class="journal-form-input" id="journalTitle" placeholder="给你的梦境取个名字">
+                    </div>
+
+                    <div class="journal-form-group">
+                        <label class="journal-form-label" for="journalDate">日期与时间</label>
+                        <input type="datetime-local" class="journal-form-input" id="journalDate">
+                    </div>
+
+                    <div class="journal-form-group">
+                        <label class="journal-form-label" for="journalMood">梦境情绪</label>
+                        <div class="mood-options">
+                            <button type="button" class="mood-btn" data-mood="happy">
+                                <i class="fas fa-smile" style="color: #f59e0b;"></i>
+                            </button>
+                            <button type="button" class="mood-btn" data-mood="sad">
+                                <i class="fas fa-frown" style="color: #ef4444;"></i>
+                            </button>
+                            <button type="button" class="mood-btn" data-mood="neutral">
+                                <i class="fas fa-meh" style="color: #6b7280;"></i>
+                            </button>
+                            <button type="button" class="mood-btn" data-mood="surprised">
+                                <i class="fas fa-surprise" style="color: #3b82f6;"></i>
+                            </button>
+                            <button type="button" class="mood-btn" data-mood="scared">
+                                <i class="fas fa-fear" style="color: #8b5cf6;"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="journal-form-group">
+                        <label class="journal-form-label" for="journalContent">梦境描述</label>
+                        <textarea class="journal-form-textarea" id="journalContent"
+                            placeholder="详细描述你的梦境..."></textarea>
+                    </div>
+
+                    <div class="journal-form-group">
+                        <label class="journal-form-label">梦境标签</label>
+                        <div class="tag-input-container" id="tagContainer">
+                            <!-- 标签将通过JavaScript动态生成 -->
+                            <input type="text" class="tag-input" id="tagInput" placeholder="添加标签...">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-button cancel-button" id="cancelJournal">取消</button>
+                <button class="modal-button save-button" id="saveJournal">保存梦境</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 通知提示 -->
+    <div id="notification" class="fixed bottom-4 right-4 bg-primary/90 text-white py-3 px-6 rounded-lg shadow-lg transform translate-y-16 opacity-0 transition-all duration-300 z-50"></div>
+
+    <script>
+        // 创建星空效果
+        document.addEventListener('DOMContentLoaded', function () {
+            // 加载本地存储的日记
+            let dreamJournals = JSON.parse(localStorage.getItem('dreamJournals')) || [
+                {
+                    id: 1,
+                    title: "飞翔的自由感",
+                    date: "2025-07-29T05:30",
+                    content: "我发现自己可以在城市上空自由飞翔，没有任何束缚。风在耳边呼啸，我可以看到下面的街道和建筑，那种自由的感觉难以言表。我试着飞得更高，直到云层之上，阳光照在脸上，温暖而明亮...",
+                    mood: "happy",
+                    tags: ["飞翔", "自由", "城市"]
+                },
+                {
+                    id: 2,
+                    title: "迷失在陌生的地方",
+                    date: "2023-07-24T04:15",
+                    content: "我发现自己身处一个陌生的地方，周围的建筑和街道都很奇怪。我试着找到回家的路，但无论怎么走都回到同一个地方。我开始感到焦虑，不知道该怎么办...",
+                    mood: "sad",
+                    tags: ["迷失", "陌生", "焦虑"]
+                },
+                {
+                    id: 3,
+                    title: "与故人重逢",
+                    date: "2018-07-20T03:45",
+                    content: "在梦中，我遇到了一位很久没见的老朋友。我们聊了很多过去的事情，感觉就像回到了过去。我感到非常开心，但当我想更清楚地看看他的脸时，他却渐渐模糊消失了...",
+                    mood: "happy",
+                    tags: ["故人", "回忆", "重逢"]
+                },
+                {
+                    id: 4,
+                    title: "被追逐的恐惧",
+                    date: "2020-07-16T05:10",
+                    content: "我在一个黑暗的森林中被某种未知的生物追逐。我拼命逃跑，但双腿好像变得沉重，每一步都很艰难。那种恐惧的感觉非常真实，我能感觉到自己的心跳加速...",
+                    mood: "scared",
+                    tags: ["被追逐", "恐惧", "森林"]
+                },
+                {
+                    id: 5,
+                    title: "深海探险",
+                    date: "2023-07-11T02:20",
+                    content: "我在一片深蓝色的海洋中游泳，周围是各种美丽的鱼和发光的生物。我发现自己可以在水中呼吸，探索这个神秘的海底世界...",
+                    mood: "surprised",
+                    tags: ["水", "海底", "神秘"]
+                },
+                {
+                    id: 6,
+                    title: "考试的压力",
+                    date: "2024-07-08T03:30",
+                    content: "我参加了一场重要的考试，但发现自己什么都不会。时间一分一秒过去，我感到越来越紧张，不知道该怎么办...",
+                    mood: "scared",
+                    tags: ["考试", "压力", "学校"]
+                },
+                {
+                                        id: 7,
+                    title: "超自然现象",
+                    date: "2025-07-03T04:45",
+                    content: "我目睹了一些超自然现象，如物体漂浮、幽灵出现等。我感到非常惊讶和恐惧，但同时也感到好奇...",
+                    mood: "surprised",
+                    tags: ["超自然", "幽灵", "神秘"]
+                }
+            ];
+
+            // 保存日记到本地存储
+            function saveJournalsToLocalStorage() {
+                localStorage.setItem('dreamJournals', JSON.stringify(dreamJournals));
+            }
+
+            // 显示通知
+            function showNotification(message, type = 'success') {
+                const notification = document.getElementById('notification');
+                notification.textContent = message;
+                notification.className = `fixed bottom-4 right-4 py-3 px-6 rounded-lg shadow-lg transform translate-y-16 opacity-0 transition-all duration-300 z-50`;
+                
+                if (type === 'success') {
+                    notification.classList.add('bg-primary/90', 'text-white');
+                } else {
+                    notification.classList.add('bg-red-500/90', 'text-white');
+                }
+                
+                setTimeout(() => {
+                    notification.classList.remove('translate-y-16', 'opacity-0');
+                }, 100);
+                
+                setTimeout(() => {
+                    notification.classList.add('translate-y-16', 'opacity-0');
+                }, 3000);
+            }
+
+            // 当前日期和视图
+            let currentDate = new Date();
+            let currentViewDate = new Date(currentDate);
+            let selectedDate = null;
+            let currentFilter = 'all';
+
+            // 初始化日历
+            function initCalendar() {
+                renderCalendar();
+                renderJournalList();
+                setupFilterEvents();
+                setupMoodButtons();
+            }
+
+            // 渲染日历
+            function renderCalendar() {
+                const calendarGrid = document.getElementById('calendarGrid');
+                const calendarTitle = document.getElementById('calendarTitle');
+
+                // 设置日历标题
+                const year = currentViewDate.getFullYear();
+                const month = currentViewDate.getMonth();
+                calendarTitle.textContent = `${year}年${month + 1}月`;
+
+                // 清空日历网格
+                calendarGrid.innerHTML = '';
+
+                // 获取当月第一天和最后一天
+                const firstDay = new Date(year, month, 1);
+                const lastDay = new Date(year, month + 1, 0);
+
+                // 获取当月第一天是星期几 (0-6, 0是星期日)
+                const firstDayIndex = firstDay.getDay();
+
+                // 获取上个月的最后几天
+                const prevMonthLastDay = new Date(year, month, 0).getDate();
+
+                // 填充日历网格
+                // 上个月的剩余天数
+                for (let i = firstDayIndex; i > 0; i--) {
+                    const dayElement = document.createElement('div');
+                    dayElement.classList.add('calendar-day', 'empty');
+                    dayElement.textContent = prevMonthLastDay - i + 1;
+                    calendarGrid.appendChild(dayElement);
+                }
+
+                // 当月的天数
+                const daysInMonth = lastDay.getDate();
+                for (let i = 1; i <= daysInMonth; i++) {
+                    const dayElement = document.createElement('div');
+                    dayElement.classList.add('calendar-day');
+                    dayElement.textContent = i;
+
+                    // 检查是否有该日期的日记
+                    const hasJournal = dreamJournals.some(journal => {
+                        const journalDate = new Date(journal.date);
+                        return journalDate.getDate() === i &&
+                            journalDate.getMonth() === month &&
+                            journalDate.getFullYear() === year;
+                    });
+
+                    if (hasJournal) {
+                        dayElement.classList.add('has-journal');
+                    }
+
+                    // 标记今天
+                    if (i === currentDate.getDate() &&
+                        month === currentDate.getMonth() &&
+                        year === currentDate.getFullYear()) {
+                        dayElement.classList.add('today');
+                    }
+
+                    // 标记选中的日期
+                    if (selectedDate &&
+                        i === selectedDate.getDate() &&
+                        month === selectedDate.getMonth() &&
+                        year === selectedDate.getFullYear()) {
+                        dayElement.classList.add('selected');
+                    }
+
+                    // 添加点击事件
+                    dayElement.addEventListener('click', () => {
+                        selectDate(new Date(year, month, i));
+                    });
+
+                    calendarGrid.appendChild(dayElement);
+                }
+
+                // 下个月的开始几天
+                const remainingCells = 42 - (firstDayIndex + daysInMonth);
+                if (remainingCells < 7) {
+                    for (let i = 1; i <= remainingCells; i++) {
+                        const dayElement = document.createElement('div');
+                        dayElement.classList.add('calendar-day', 'empty');
+                        dayElement.textContent = i;
+                        calendarGrid.appendChild(dayElement);
+                    }
+                }
+            }
+
+            // 选择日期
+            function selectDate(date) {
+                selectedDate = date;
+                renderCalendar();
+                renderJournalList();
+
+                // 打开模态框并设置日期
+                openJournalModal(date);
+            }
+
+            // 打开日记模态框
+            function openJournalModal(date) {
+                const journalModal = document.getElementById('journalModal');
+                const modalTitle = document.getElementById('modalTitle');
+                const journalDate = document.getElementById('journalDate');
+
+                // 设置模态框标题
+                if (date) {
+                    modalTitle.textContent = `记录 ${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日 的梦境`;
+
+                    // 设置日期时间（默认时间为早上5点，通常是梦境高发时间）
+                    const defaultTime = "05:00";
+                    const formattedDate = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}T${defaultTime}`;
+                    journalDate.value = formattedDate;
+                } else {
+                    modalTitle.textContent = "记录新梦境";
+
+                    // 设置当前日期时间
+                    const now = new Date();
+                    const formattedDate = now.toISOString().slice(0, 16);
+                    journalDate.value = formattedDate;
+                }
+
+                // 设置情绪选择（如果没有选中的，默认选中中性）
+                const moodBtns = document.querySelectorAll('.mood-btn');
+                let hasSelected = false;
+
+                moodBtns.forEach(btn => {
+                    btn.classList.remove('selected');
+                });
+
+                // 如果没有选中的，默认选中中性
+                const neutralBtn = document.querySelector('.mood-btn[data-mood="neutral"]');
+                if (neutralBtn) {
+                    neutralBtn.classList.add('selected');
+                }
+
+                // 添加特殊标签按钮
+                const tagContainer = document.getElementById('tagContainer');
+                const specialTags = ['重要', '奇怪', '重复'];
+                tagContainer.innerHTML = '';
+
+                specialTags.forEach(tag => {
+                    const tagBtn = document.createElement('button');
+                    tagBtn.type = 'button';
+                    tagBtn.className = 'journal-tag';
+                    tagBtn.textContent = tag;
+                    tagBtn.addEventListener('click', function () {
+                        addTag(tag);
+                    });
+                    tagContainer.appendChild(tagBtn);
+                });
+
+                const tagInput = document.createElement('input');
+                tagInput.type = 'text';
+                tagInput.className = 'tag-input';
+                tagInput.id = 'tagInput';
+                tagInput.placeholder = '添加标签...';
+                tagContainer.appendChild(tagInput);
+
+                // 显示模态框
+                journalModal.classList.add('active');
+            }
+
+            // 渲染日记列表
+            function renderJournalList() {
+                const journalList = document.getElementById('journalList');
+                journalList.innerHTML = '';
+
+                // 过滤日记
+                let filteredJournals = [...dreamJournals];
+
+                switch (currentFilter) {
+                    case 'week':
+                        const startOfWeek = new Date(currentDate);
+                        startOfWeek.setDate(currentDate.getDate() - currentDate.getDay());
+                        const endOfWeek = new Date(startOfWeek);
+                        endOfWeek.setDate(startOfWeek.getDate() + 6);
+                        filteredJournals = filteredJournals.filter(journal => {
+                            const journalDate = new Date(journal.date);
+                            return journalDate >= startOfWeek && journalDate <= endOfWeek;
+                        });
+                        break;
+                    case 'month':
+                        const startOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+                        const endOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
+                        filteredJournals = filteredJournals.filter(journal => {
+                            const journalDate = new Date(journal.date);
+                            return journalDate >= startOfMonth && journalDate <= endOfMonth;
+                        });
+                        break;
+                    case 'important':
+                        filteredJournals = filteredJournals.filter(journal => journal.tags.includes('重要'));
+                        break;
+                    case 'strange':
+                        filteredJournals = filteredJournals.filter(journal => journal.tags.includes('奇怪'));
+                        break;
+                    case 'recurring':
+                        filteredJournals = filteredJournals.filter(journal => journal.tags.includes('重复'));
+                        break;
+                }
+
+                // 渲染过滤后的日记
+                filteredJournals.forEach(journal => {
+                    const journalCard = document.createElement('div');
+                    journalCard.classList.add('journal-card');
+
+                    const journalHeader = document.createElement('div');
+                    journalHeader.classList.add('journal-header');
+
+                    const journalDate = document.createElement('div');
+                    journalDate.classList.add('journal-date');
+                    journalDate.textContent = new Date(journal.date).toLocaleString();
+
+                    const journalTitle = document.createElement('div');
+                    journalTitle.classList.add('journal-title');
+                    journalTitle.textContent = journal.title;
+
+                    journalHeader.appendChild(journalDate);
+                    journalHeader.appendChild(journalTitle);
+
+                    const journalContent = document.createElement('div');
+                    journalContent.classList.add('journal-content');
+                    journalContent.textContent = journal.content;
+
+                    const journalTags = document.createElement('div');
+                    journalTags.classList.add('journal-tags');
+                    journal.tags.forEach(tag => {
+                        const tagElement = document.createElement('div');
+                        tagElement.classList.add('journal-tag');
+                        tagElement.textContent = tag;
+                        journalTags.appendChild(tagElement);
+                    });
+
+                    const journalActions = document.createElement('div');
+                    journalActions.classList.add('journal-actions');
+
+                    const editAction = document.createElement('button');
+                    editAction.classList.add('journal-action');
+                    editAction.innerHTML = '<i class="fas fa-edit"></i> 编辑';
+                    editAction.addEventListener('click', () => {
+                        openJournalModal(new Date(journal.date));
+                        // 填充表单数据
+                        document.getElementById('journalTitle').value = journal.title;
+                        document.getElementById('journalDate').value = journal.date;
+                        document.getElementById('journalContent').value = journal.content;
+
+                        const moodBtns = document.querySelectorAll('.mood-btn');
+                        moodBtns.forEach(btn => {
+                            if (btn.getAttribute('data-mood') === journal.mood) {
+                                btn.classList.add('selected');
+                            } else {
+                                btn.classList.remove('selected');
+                            }
+                        });
+
+                        const tagContainer = document.getElementById('tagContainer');
+                        tagContainer.innerHTML = '';
+                        journal.tags.forEach(tag => {
+                            const tagElement = document.createElement('div');
+                            tagElement.classList.add('tag-item');
+                            tagElement.innerHTML = `${tag} <span class="remove-tag"><i class="fas fa-times"></i></span>`;
+                            tagElement.querySelector('.remove-tag').addEventListener('click', () => {
+                                tagContainer.removeChild(tagElement);
+                            });
+                            tagContainer.appendChild(tagElement);
+                        });
+
+                        const tagInput = document.createElement('input');
+                        tagInput.type = 'text';
+                        tagInput.className = 'tag-input';
+                        tagInput.id = 'tagInput';
+                        tagInput.placeholder = '添加标签...';
+                        tagContainer.appendChild(tagInput);
+                    });
+
+                    const deleteAction = document.createElement('button');
+                    deleteAction.classList.add('journal-action');
+                    deleteAction.innerHTML = '<i class="fas fa-trash"></i> 删除';
+                    deleteAction.addEventListener('click', () => {
+                        if (confirm('确定要删除这篇梦境日记吗？')) {
+                            const index = dreamJournals.findIndex(j => j.id === journal.id);
+                            if (index !== -1) {
+                                dreamJournals.splice(index, 1);
+                                saveJournalsToLocalStorage();
+                                renderCalendar();
+                                renderJournalList();
+                                showNotification('梦境日记已删除');
+                            }
+                        }
+                    });
+
+                    journalActions.appendChild(editAction);
+                    journalActions.appendChild(deleteAction);
+
+                    journalCard.appendChild(journalHeader);
+                    journalCard.appendChild(journalContent);
+                    journalCard.appendChild(journalTags);
+                    journalCard.appendChild(journalActions);
+
+                    journalList.appendChild(journalCard);
+                });
+            }
+
+            // 设置过滤标签事件
+            function setupFilterEvents() {
+                const filterTags = document.querySelectorAll('.filter-tag');
+                filterTags.forEach(tag => {
+                    tag.addEventListener('click', () => {
+                        filterTags.forEach(t => t.classList.remove('active'));
+                        tag.classList.add('active');
+                        currentFilter = tag.getAttribute('data-filter');
+                        renderJournalList();
+                    });
+                });
+            }
+
+            // 设置情绪按钮事件
+            function setupMoodButtons() {
+                const moodBtns = document.querySelectorAll('.mood-btn');
+                moodBtns.forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        // 移除所有按钮的选中状态
+                        moodBtns.forEach(b => b.classList.remove('selected'));
+                        // 添加当前按钮的选中状态
+                        btn.classList.add('selected');
+                    });
+                });
+            }
+
+            // 添加标签
+            function addTag(tag) {
+                const tagContainer = document.getElementById('tagContainer');
+                const existingTags = Array.from(tagContainer.querySelectorAll('.tag-item')).map(item => 
+                    item.textContent.replace('×', '').trim()
+                );
+                
+                // 检查标签是否已存在
+                if (!existingTags.includes(tag)) {
+                    const tagElement = document.createElement('div');
+                    tagElement.classList.add('tag-item');
+                    tagElement.innerHTML = `${tag} <span class="remove-tag"><i class="fas fa-times"></i></span>`;
+                    tagElement.querySelector('.remove-tag').addEventListener('click', () => {
+                        tagContainer.removeChild(tagElement);
+                    });
+                    
+                    // 插入到标签输入框之前
+                    const tagInput = document.getElementById('tagInput');
+                    tagContainer.insertBefore(tagElement, tagInput);
+                }
+            }
+
+            // 初始化日历
+            initCalendar();
+
+            // 点击记录新梦境按钮
+            document.getElementById('createJournalBtn').addEventListener('click', () => {
+                openJournalModal(null);
+            });
+
+            // 关闭模态框
+            document.getElementById('closeModal').addEventListener('click', () => {
+                const journalModal = document.getElementById('journalModal');
+                journalModal.classList.remove('active');
+            });
+
+            // 取消新建日记
+            document.getElementById('cancelJournal').addEventListener('click', () => {
+                const journalModal = document.getElementById('journalModal');
+                journalModal.classList.remove('active');
+            });
+
+            // 保存日记
+            document.getElementById('saveJournal').addEventListener('click', () => {
+                const journalTitle = document.getElementById('journalTitle').value;
+                const journalDate = document.getElementById('journalDate').value;
+                const journalMood = document.querySelector('.mood-btn.selected').getAttribute('data-mood');
+                const journalContent = document.getElementById('journalContent').value;
+                const tagElements = document.querySelectorAll('.tag-item');
+                const tags = Array.from(tagElements).map(tag => tag.textContent.replace('×', '').trim());
+
+                // 验证表单
+                if (!journalTitle || !journalDate || !journalContent) {
+                    showNotification('请填写所有必填字段', 'error');
+                    return;
+                }
+
+                // 检查是新建还是编辑
+                const isEdit = dreamJournals.some(j => new Date(j.date).toDateString() === new Date(journalDate).toDateString() && j.title === journalTitle);
+
+                if (isEdit) {
+                    // 编辑现有日记
+                    const index = dreamJournals.findIndex(j => new Date(j.date).toDateString() === new Date(journalDate).toDateString() && j.title === journalTitle);
+                    if (index !== -1) {
+                        dreamJournals[index] = {
+                            ...dreamJournals[index],
+                            date: journalDate,
+                            mood: journalMood,
+                            content: journalContent,
+                            tags: tags
+                        };
+                        showNotification('梦境日记已更新');
+                    }
+                } else {
+                    // 创建新日记
+                    const newJournal = {
+                        id: dreamJournals.length > 0 ? Math.max(...dreamJournals.map(j => j.id)) + 1 : 1,
+                        title: journalTitle,
+                        date: journalDate,
+                        content: journalContent,
+                        mood: journalMood,
+                        tags: tags
+                    };
+
+                    dreamJournals.push(newJournal);
+                    showNotification('新梦境日记已保存');
+                }
+
+                // 保存到本地存储
+                saveJournalsToLocalStorage();
+
+                const journalModal = document.getElementById('journalModal');
+                journalModal.classList.remove('active');
+                renderCalendar();
+                renderJournalList();
+            });
+
+            // 上一个月
+            document.getElementById('prevMonth').addEventListener('click', () => {
+                currentViewDate.setMonth(currentViewDate.getMonth() - 1);
+                renderCalendar();
+            });
+
+            // 今天
+            document.getElementById('todayBtn').addEventListener('click', () => {
+                currentViewDate = new Date(currentDate);
+                renderCalendar();
+            });
+
+            // 下一个月
+            document.getElementById('nextMonth').addEventListener('click', () => {
+                currentViewDate.setMonth(currentViewDate.getMonth() + 1);
+                renderCalendar();
+            });
+
+            // 标签输入框回车添加标签
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' && document.activeElement.id === 'tagInput') {
+                    e.preventDefault();
+                    const tagInput = document.getElementById('tagInput');
+                    const tag = tagInput.value.trim();
+                    if (tag) {
+                        addTag(tag);
+                        tagInput.value = '';
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

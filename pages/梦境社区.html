@@ -1,0 +1,1070 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>梦境社区 | 梦境广场</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* 保持与其他页面相同的样式 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #6d28d9;
+            --secondary: #8b5cf6;
+            --dark: #0f172a;
+            --light: #f8fafc;
+            --accent: #c4b5fd;
+            --text: #1e293b;
+        }
+
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            color: var(--light);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+            padding-bottom: 60px;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                radial-gradient(circle at 15% 20%, rgba(139, 92, 246, 0.1), transparent 25%),
+                radial-gradient(circle at 85% 30%, rgba(199, 210, 254, 0.1), transparent 25%),
+                radial-gradient(circle at 50% 70%, rgba(124, 58, 237, 0.1), transparent 30%);
+            z-index: -1;
+        }
+
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background-color: white;
+            border-radius: 50%;
+            animation: twinkle var(--duration, 4s) infinite var(--delay, 0s);
+        }
+
+        @keyframes twinkle {
+            0%,
+            100% {
+                opacity: 0.2;
+            }
+
+            50% {
+                opacity: 1;
+            }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            padding: 20px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--light);
+            text-decoration: none;
+            font-family: 'Ma Shan Zheng', cursive;
+        }
+
+        .logo i {
+            color: var(--accent);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+
+        nav a {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 18px;
+            transition: all 0.3s ease;
+            position: relative;
+            padding-bottom: 5px;
+        }
+
+        nav a:hover {
+            color: white;
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            transition: width 0.3s ease;
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        .community-hero {
+            padding: 80px 0;
+            text-align: center;
+        }
+
+        .hero-title {
+            font-size: 50px;
+            margin-bottom: 30px;
+            font-family: 'Ma Shan Zheng', cursive;
+        }
+
+        .hero-description {
+            font-size: 20px;
+            max-width: 800px;
+            margin: 0 auto 40px;
+            color: #cbd5e1;
+        }
+
+        .community-stats {
+            display: flex;
+            justify-content: center;
+            gap: 60px;
+            margin-bottom: 60px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 40px;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            font-size: 18px;
+            color: #94a3b8;
+        }
+
+        .section-title {
+            font-size: 36px;
+            margin-bottom: 40px;
+            font-family: 'Ma Shan Zheng', cursive;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 80px;
+            height: 3px;
+            background: var(--accent);
+        }
+
+        .featured-posts {
+            margin-bottom: 80px;
+        }
+
+        .post-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .post-card {
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(124, 58, 237, 0.2);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .post-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(139, 92, 246, 0.5);
+        }
+
+        .post-header {
+            padding: 20px;
+            border-bottom: 1px solid rgba(124, 58, 237, 0.1);
+        }
+
+        .post-title {
+            font-size: 22px;
+            margin-bottom: 10px;
+            color: var(--accent);
+        }
+
+        .post-meta {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 14px;
+            color: #94a3b8;
+        }
+
+        .post-author {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .author-avatar {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: rgba(139, 92, 246, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .post-content {
+            padding: 20px;
+            line-height: 1.6;
+            color: #cbd5e1;
+        }
+
+        .post-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 15px;
+        }
+
+        .post-tag {
+            padding: 5px 12px;
+            background: rgba(139, 92, 246, 0.1);
+            border-radius: 20px;
+            font-size: 13px;
+            color: #cbd5e1;
+        }
+
+        .post-actions {
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid rgba(124, 58, 237, 0.1);
+        }
+
+        .action-button {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .action-button:hover {
+            color: var(--accent);
+        }
+
+        .groups-section {
+            margin-bottom: 80px;
+        }
+
+        .groups-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .group-card {
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(124, 58, 237, 0.2);
+            border-radius: 20px;
+            padding: 25px;
+            transition: all 0.3s ease;
+        }
+
+        .group-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(139, 92, 246, 0.5);
+        }
+
+        .group-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: rgba(139, 92, 246, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: var(--accent);
+            margin-bottom: 20px;
+        }
+
+        .group-title {
+            font-size: 20px;
+            margin-bottom: 10px;
+            color: var(--accent);
+        }
+
+        .group-description {
+            font-size: 15px;
+            color: #cbd5e1;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .group-members {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .member-count {
+            color: #94a3b8;
+            font-size: 14px;
+        }
+
+        .join-button {
+            display: block;
+            width: 100%;
+            padding: 10px 15px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border-radius: 50px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .join-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(109, 40, 217, 0.3);
+        }
+
+        .workshops-section {
+            margin-bottom: 80px;
+        }
+
+        .workshop-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .workshop-card {
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(124, 58, 237, 0.2);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .workshop-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(139, 92, 246, 0.5);
+        }
+
+        .workshop-header {
+            padding: 20px;
+            background: rgba(109, 40, 217, 0.2);
+        }
+
+        .workshop-title {
+            font-size: 22px;
+            margin-bottom: 10px;
+            color: var(--accent);
+        }
+
+        .workshop-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 14px;
+            color: #94a3b8;
+        }
+
+        .workshop-date,
+        .workshop-type {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .workshop-content {
+            padding: 20px;
+            line-height: 1.6;
+            color: #cbd5e1;
+        }
+
+        .workshop-cta {
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid rgba(124, 58, 237, 0.1);
+        }
+
+        .register-button {
+            padding: 8px 20px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .register-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(109, 40, 217, 0.3);
+        }
+
+        .create-post {
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(124, 58, 237, 0.2);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 80px;
+        }
+
+        .create-post h3 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: var(--accent);
+        }
+
+        .post-form {
+            display: grid;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-label {
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+
+        .form-input,
+        .form-textarea {
+            padding: 15px;
+            background: rgba(15, 23, 42, 0.4);
+            border: 1px solid rgba(124, 58, 237, 0.2);
+            border-radius: 10px;
+            color: var(--light);
+            font-size: 16px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus,
+        .form-textarea:focus {
+            border-color: rgba(139, 92, 246, 0.5);
+        }
+
+        .form-textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        .post-tags-input {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding: 10px;
+            background: rgba(15, 23, 42, 0.4);
+            border: 1px solid rgba(124, 58, 237, 0.2);
+            border-radius: 10px;
+        }
+
+        .tag-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 5px 10px;
+            background: rgba(139, 92, 246, 0.2);
+            border-radius: 20px;
+            color: var(--accent);
+        }
+
+        .remove-tag {
+            cursor: pointer;
+        }
+
+        .tag-input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: var(--light);
+            outline: none;
+            min-width: 100px;
+        }
+
+        .post-options {
+            display: flex;
+            gap: 20px;
+        }
+
+        .submit-button {
+            padding: 12px 30px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            font-size: 16px;
+        }
+
+        .submit-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(109, 40, 217, 0.3);
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px 0;
+            color: #94a3b8;
+            border-top: 1px solid rgba(124, 58, 237, 0.1);
+            margin-top: 60px;
+        }
+
+        @media (max-width: 900px) {
+            nav ul {
+                gap: 15px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .section-title {
+                font-size: 32px;
+            }
+
+            .logo {
+                font-size: 24px;
+            }
+
+            .community-stats {
+                flex-wrap: wrap;
+                gap: 30px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 动态星星背景 -->
+    <div class="stars" id="stars"></div>
+
+    <div class="container">
+        <!-- 导航栏 -->
+        <header>
+            <a href="梦境广场.html" class="logo">
+                <i class="fas fa-cloud-moon"></i>
+                梦境广场
+            </a>
+            <nav>
+                <ul>
+                    <li><a href="梦境广场.html">首页</a></li>
+                    <li><a href="梦境日记.html">梦境日记</a></li>
+                    <li><a href="夜梦奇遇.html">夜梦奇遇</a></li>
+                    <li><a href="梦旅指南.html">梦旅指南</a></li>
+                    <li><a href="同频共振.html">同频共振</a></li>
+                    <li><a href="奇幻碎片.html">奇幻碎片</a></li>
+                    <li><a href="关于我们.html">关于我们</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <!-- 社区英雄区域 -->
+        <section class="community-hero">
+            <h1 class="hero-title">梦境社区</h1>
+            <p class="hero-description">
+                加入我们的梦境社区，与志同道合的梦旅人分享你的梦境体验，参与集体梦境实验，寻找你的梦境导师，一起探索潜意识的奥秘。
+            </p>
+            <div class="community-stats">
+                <div class="stat-item">
+                    <div class="stat-number">12,453</div>
+                    <div class="stat-label">活跃梦旅人</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">8,762</div>
+                    <div class="stat-label">梦境分享</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">328</div>
+                    <div class="stat-label">主题讨论组</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">156</div>
+                    <div class="stat-label">梦境工作坊</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 创建新帖子区域 -->
+        <section class="create-post">
+            <h3>分享你的梦境故事</h3>
+            <form class="post-form">
+                <div class="form-group">
+                    <label class="form-label" for="post-title">梦境标题</label>
+                    <input type="text" class="form-input" id="post-title" placeholder="描述你的梦境标题">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="post-content">梦境内容</label>
+                    <textarea class="form-textarea" id="post-content" placeholder="详细描述你的梦境体验..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">梦境标签</label>
+                    <div class="post-tags-input">
+                        <div class="tag-item">
+                            <span>飞翔</span>
+                            <span class="remove-tag"><i class="fas fa-times"></i></span>
+                        </div>
+                        <div class="tag-item">
+                            <span>恐惧</span>
+                            <span class="remove-tag"><i class="fas fa-times"></i></span>
+                        </div>
+                        <input type="text" class="tag-input" placeholder="添加标签...">
+                    </div>
+                </div>
+                <div class="post-options">
+                    <button type="submit" class="submit-button">
+                        <i class="fas fa-paper-plane"></i> 发布梦境
+                    </button>
+                </div>
+            </form>
+        </section>
+
+        <!-- 精选帖子区域 -->
+        <section class="featured-posts">
+            <h2 class="section-title">热门梦境分享</h2>
+            <div class="post-grid">
+                <div class="post-card">
+                    <div class="post-header">
+                        <h3 class="post-title">我在天空中自由翱翔</h3>
+                        <div class="post-meta">
+                            <div class="post-author">
+                                <div class="author-avatar">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                                <span>晓梦迷蝶</span>
+                            </div>
+                            <div>3天前</div>
+                        </div>
+                    </div>
+                    <div class="post-content">
+                        <p>我发现自己在城市上空自由飞翔，没有任何束缚。我可以随心所欲地控制方向，感受风在耳边呼啸。地面上的一切都变得那么小，我感到一种前所未有的自由和快乐...</p>
+                    </div>
+                    <div class="post-tags">
+                        <span class="post-tag">飞翔</span>
+                        <span class="post-tag">自由</span>
+                        <span class="post-tag">城市</span>
+                    </div>
+                    <div class="post-actions">
+                        <div class="action-button">
+                            <i class="fas fa-heart"></i>
+                            <span>42</span>
+                        </div>
+                        <div class="action-button">
+                            <i class="fas fa-comment"></i>
+                            <span>18</span>
+                        </div>
+                        <div class="action-button">
+                            <i class="fas fa-share"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="post-card">
+                    <div class="post-header">
+                        <h3 class="post-title">被追逐的噩梦</h3>
+                        <div class="post-meta">
+                            <div class="post-author">
+                                <div class="author-avatar">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                                <span>暗夜行者</span>
+                            </div>
+                            <div>1周前</div>
+                        </div>
+                    </div>
+                    <div class="post-content">
+                        <p>我在一个黑暗的森林中被某种未知的生物追逐。我拼命逃跑，但双腿好像变得沉重，每一步都很艰难。那种恐惧的感觉是如此真实，我能感受到自己的心跳加速...</p>
+                    </div>
+                    <div class="post-tags">
+                        <span class="post-tag">恐惧</span>
+                        <span class="post-tag">追逐</span>
+                        <span class="post-tag">森林</span>
+                    </div>
+                    <div class="post-actions">
+                        <div class="action-button">
+                            <i class="fas fa-heart"></i>
+                            <span>36</span>
+                        </div>
+                        <div class="action-button">
+                            <i class="fas fa-comment"></i>
+                            <span>24</span>
+                        </div>
+                        <div class="action-button">
+                            <i class="fas fa-share"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="post-card">
+                    <div class="post-header">
+                        <h3 class="post-title">海底世界的奇妙之旅</h3>
+                        <div class="post-meta">
+                            <div class="post-author">
+                                <div class="author-avatar">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                                <span>深海潜行者</span>
+                            </div>
+                            <div>2周前</div>
+                        </div>
+                    </div>
+                    <div class="post-content">
+                        <p>我在一片深蓝色的海洋中游泳，周围是各种美丽的鱼和发光的生物。我发现自己可以在水中呼吸，探索这个神秘的海底世界。我甚至遇到了一些从未见过的生物...</p>
+                    </div>
+                    <div class="post-tags">
+                        <span class="post-tag">海底</span>
+                        <span class="post-tag">水</span>
+                        <span class="post-tag">神秘</span>
+                    </div>
+                    <div class="post-actions">
+                        <div class="action-button">
+                            <i class="fas fa-heart"></i>
+                            <span>53</span>
+                        </div>
+                        <div class="action-button">
+                            <i class="fas fa-comment"></i>
+                            <span>31</span>
+                        </div>
+                        <div class="action-button">
+                            <i class="fas fa-share"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 主题小组区域 -->
+        <section class="groups-section">
+            <h2 class="section-title">探索主题小组</h2>
+            <div class="groups-grid">
+                <div class="group-card">
+                    <div class="group-icon">
+                        <i class="fas fa-feather"></i>
+                    </div>
+                    <h3 class="group-title">清醒梦探索者</h3>
+                    <p class="group-description">
+                        学习控制梦境，探索潜意识世界，分享清醒梦技巧和体验的小组。
+                    </p>
+                    <div class="group-members">
+                        <div class="member-count">
+                            <i class="fas fa-users"></i> 1,245 成员
+                        </div>
+                    </div>
+                    <button class="join-button">
+                        <i class="fas fa-plus"></i> 加入小组
+                    </button>
+                </div>
+
+                <div class="group-card">
+                    <div class="group-icon">
+                        <i class="fas fa-book"></i>
+                    </div>
+                    <h3 class="group-title">梦境解析与心理学</h3>
+                    <p class="group-description">
+                        从心理学和精神分析角度解读梦境象征意义的专业小组。
+                    </p>
+                    <div class="group-members">
+                        <div class="member-count">
+                            <i class="fas fa-users"></i> 987 成员
+                        </div>
+                    </div>
+                    <button class="join-button">
+                        <i class="fas fa-plus"></i> 加入小组
+                    </button>
+                </div>
+
+                <div class="group-card">
+                    <div class="group-icon">
+                        <i class="fas fa-moon"></i>
+                    </div>
+                    <h3 class="group-title">噩梦转化工作坊</h3>
+                    <p class="group-description">
+                        学习将噩梦转化为积极体验的技巧，分享噩梦处理经验的支持小组。
+                    </p>
+                    <div class="group-members">
+                        <div class="member-count">
+                            <i class="fas fa-users"></i> 763 成员
+                        </div>
+                    </div>
+                    <button class="join-button">
+                        <i class="fas fa-plus"></i> 加入小组
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 工作坊区域 -->
+        <section class="workshops-section">
+            <h2 class="section-title">即将开始的工作坊</h2>
+            <div class="workshop-grid">
+                <div class="workshop-card">
+                    <div class="workshop-header">
+                        <h3 class="workshop-title">清醒梦入门：掌控你的梦境</h3>
+                        <div class="workshop-info">
+                            <div class="workshop-date">
+                                <i class="fas fa-calendar"></i> 7月15日
+                            </div>
+                            <div class="workshop-type">
+                                <i class="fas fa-video"></i> 线上
+                            </div>
+                        </div>
+                    </div>
+                    <div class="workshop-content">
+                        <p>由资深梦境导师带领，学习清醒梦的基本技巧和实践方法，包括梦境回忆训练、现实检查和梦境诱导技术。适合初学者。</p>
+                    </div>
+                    <div class="workshop-cta">
+                        <div class="workshop-price">免费</div>
+                        <button class="register-button">
+                            <i class="fas fa-ticket"></i> 报名参加
+                        </button>
+                    </div>
+                </div>
+
+                <div class="workshop-card">
+                    <div class="workshop-header">
+                        <h3 class="workshop-title">梦境象征与个人成长</h3>
+                        <div class="workshop-info">
+                            <div class="workshop-date">
+                                <i class="fas fa-calendar"></i> 7月22日
+                            </div>
+                            <div class="workshop-type">
+                                <i class="fas fa-map-marker"></i> 北京
+                            </div>
+                        </div>
+                    </div>
+                    <div class="workshop-content">
+                        <p>探索常见梦境象征的意义，学习如何通过解析自己的梦境获取潜意识的智慧，促进个人成长和自我认知。</p>
+                    </div>
+                    <div class="workshop-cta">
+                        <div class="workshop-price">¥298</div>
+                        <button class="register-button">
+                            <i class="fas fa-ticket"></i> 报名参加
+                        </button>
+                    </div>
+                </div>
+
+                <div class="workshop-card">
+                    <div class="workshop-header">
+                        <h3 class="workshop-title">集体梦境实验：共同创造</h3>
+                        <div class="workshop-info">
+                            <div class="workshop-date">
+                                <i class="fas fa-calendar"></i> 7月29日
+                            </div>
+                            <div class="workshop-type">
+                                <i class="fas fa-video"></i> 线上
+                            </div>
+                        </div>
+                    </div>
+                    <div class="workshop-content">
+                        <p>参与集体梦境实验，学习如何设定共同的梦境意图，与其他参与者在梦中相遇，探索集体潜意识的奥秘。</p>
+                    </div>
+                    <div class="workshop-cta">
+                        <div class="workshop-price">¥198</div>
+                        <button class="register-button">
+                            <i class="fas fa-ticket"></i> 报名参加
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- 页脚 -->
+    <footer>
+        <div class="container">
+            <p>© 2025 梦境广场 | 你的潜意识栖息地 ✨</p>
+            <p>在清醒世界的边缘，我们守护每一段奇幻旅程</p>
+        </div>
+    </footer>
+
+    <script>
+        // 创建星空效果
+        document.addEventListener('DOMContentLoaded', function () {
+            const starsContainer = document.getElementById('stars');
+            const starsCount = 150;
+
+            for (let i = 0; i < starsCount; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star');
+
+               // 随机位置
+                star.style.left = `${Math.random() * 100}vw`;
+                star.style.top = `${Math.random() * 100}vh`;
+
+                // 随机大小
+                const size = Math.random() * 3;
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+
+                // 随机动画参数
+                star.style.setProperty('--duration', `${Math.random() * 8 + 2}s`);
+                star.style.setProperty('--delay', `${Math.random() * 5}s`);
+
+                starsContainer.appendChild(star);
+            }
+
+            // 添加鼠标移动粒子效果
+            document.body.addEventListener('mousemove', function (e) {
+                const particles = document.createElement('div');
+                particles.classList.add('star');
+                particles.style.left = `${e.clientX}px`;
+                particles.style.top = `${e.clientY}px`;
+                particles.style.opacity = '0.7';
+                particles.style.animation = 'none';
+
+                starsContainer.appendChild(particles);
+
+                // 移除粒子
+                setTimeout(() => {
+                    particles.style.opacity = '0';
+                    particles.style.transition = 'opacity 1s ease';
+
+                    setTimeout(() => {
+                        starsContainer.removeChild(particles);
+                    }, 1000);
+                }, 500);
+            });
+
+            // 标签移除功能
+            const removeTags = document.querySelectorAll('.remove-tag');
+            removeTags.forEach(tag => {
+                tag.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    this.parentElement.remove();
+                });
+            });
+
+            // 标签输入功能
+            const tagInput = document.querySelector('.tag-input');
+            if (tagInput) {
+                tagInput.addEventListener('keydown', function (e) {
+                    if (e.key === 'Enter' && this.value.trim() !== '') {
+                        const tagContainer = this.parentElement;
+                        const newTag = document.createElement('div');
+                        newTag.className = 'tag-item';
+                        newTag.innerHTML = `
+                            <span>${this.value.trim()}</span>
+                            <span class="remove-tag"><i class="fas fa-times"></i></span>
+                        `;
+                        
+                        // 添加到标签容器
+                        tagContainer.insertBefore(newTag, this);
+                        
+                        // 清空输入框
+                        this.value = '';
+                        
+                        // 为新标签添加删除事件
+                        newTag.querySelector('.remove-tag').addEventListener('click', function (e) {
+                            e.preventDefault();
+                            this.parentElement.remove();
+                        });
+                    }
+                });
+            }
+
+            // 表单提交功能
+            const postForm = document.querySelector('.post-form');
+            if (postForm) {
+                postForm.addEventListener('submit', function (e) {
+                    e.preventDefault();
+                    alert('梦境已成功发布！');
+                    // 实际项目中这里应该有AJAX请求发送表单数据
+                });
+            }
+
+            // 加入小组功能
+            const joinButtons = document.querySelectorAll('.join-button');
+            joinButtons.forEach(button => {
+                button.addEventListener('click', function () {
+                    alert('已成功加入小组！');
+                    // 实际项目中这里应该有AJAX请求处理加入小组逻辑
+                });
+            });
+
+            // 工作坊报名功能
+            const registerButtons = document.querySelectorAll('.register-button');
+            registerButtons.forEach(button => {
+                button.addEventListener('click', function () {
+                    alert('工作坊报名成功！确认邮件已发送至您的邮箱。');
+                    // 实际项目中这里应该有AJAX请求处理报名逻辑
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>

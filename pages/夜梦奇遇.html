@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>梦境探索与奇遇 | 梦境广场</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #6d28d9;
+            --secondary: #8b5cf6;
+            --dark: #0f172a;
+            --light: #f8fafc;
+            --accent: #c4b5fd;
+            --text: #1e293b;
+        }
+
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            color: var(--light);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+            padding-bottom: 60px;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                radial-gradient(circle at 15% 20%, rgba(139, 92, 246, 0.1), transparent 25%),
+                radial-gradient(circle at 85% 30%, rgba(199, 210, 254, 0.1), transparent 25%),
+                radial-gradient(circle at 50% 70%, rgba(124, 58, 237, 0.1), transparent 30%);
+            z-index: -1;
+        }
+
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background-color: white;
+            border-radius: 50%;
+            animation: twinkle var(--duration, 4s) infinite var(--delay, 0s);
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; }
+            50% { opacity: 1; }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            padding: 20px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--light);
+            text-decoration: none;
+            font-family: 'Ma Shan Zheng', cursive;
+        }
+
+        .logo i {
+            color: var(--accent);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+
+        nav a {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 18px;
+            transition: all 0.3s ease;
+            position: relative;
+            padding-bottom: 5px;
+        }
+
+        nav a:hover {
+            color: white;
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            transition: width 0.3s ease;
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        .dream-generator {
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(124, 58, 237, 0.2);
+            border-radius: 20px;
+            padding: 50px;
+            margin: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .generator-title {
+            font-size: 32px;
+            margin-bottom: 30px;
+            color: var(--accent);
+            text-align: center;
+        }
+
+        .dream-preview {
+            min-height: 200px;
+            background: rgba(15, 23, 42, 0.4);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+        }
+
+        .dream-preview::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 15px;
+            border: 1px solid rgba(139, 92, 246, 0.1);
+            pointer-events: none;
+        }
+
+        .dream-text {
+            font-size: 20px;
+            line-height: 1.8;
+            color: #cbd5e1;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.8s ease;
+        }
+
+        .dream-text.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .dream-controls {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .generate-button,
+        .save-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .generate-button:hover,
+        .save-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(109, 40, 217, 0.3);
+        }
+
+        .explore-section {
+            margin: 20px;
+        }
+
+        .section-title {
+            font-size: 32px;
+            margin-bottom: 20px;
+            color: var(--accent);
+            font-family: 'Ma Shan Zheng', cursive;
+        }
+
+        .dream-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .dream-card {
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(124, 58, 237, 0.2);
+            border-radius: 15px;
+            padding: 20px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .dream-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(139, 92, 246, 0.5);
+        }
+
+        .dream-title {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: var(--accent);
+        }
+
+        .dream-content {
+            font-size: 16px;
+            line-height: 1.6;
+            color: #cbd5e1;
+            margin-bottom: 15px;
+        }
+
+        .dream-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+
+        .dream-tag {
+            font-size: 12px;
+            background: rgba(139, 92, 246, 0.2);
+            color: var(--accent);
+            padding: 3px 8px;
+            border-radius: 10px;
+        }
+
+        .random-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--accent);
+            padding: 10px 20px;
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .random-button:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* 历史梦境弹窗 */
+        .history-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(5px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .history-modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .history-content {
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+            border-radius: 20px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow: auto;
+            transform: scale(0.9);
+            transition: all 0.3s ease;
+        }
+
+        .history-header {
+            padding: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(124, 58, 237, 0.1);
+        }
+
+        .history-title {
+            font-size: 24px;
+            font-weight: 500;
+        }
+
+        .close-history {
+            background: none;
+            border: none;
+            color: #94a3b8;
+            font-size: 24px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .close-history:hover {
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .history-list {
+            padding: 25px;
+        }
+
+        .history-item {
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border: 1px solid rgba(124, 58, 237, 0.1);
+        }
+
+        .history-date {
+            color: var(--accent);
+            margin-bottom: 10px;
+        }
+
+        .history-text {
+            color: #cbd5e1;
+            line-height: 1.6;
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px 0;
+            color: #94a3b8;
+            border-top: 1px solid rgba(124, 58, 237, 0.1);
+            margin-top: 60px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 动态星星背景 -->
+    <div class="stars" id="stars"></div>
+
+    <div class="container">
+        <!-- 导航栏 -->
+        <header>
+            <a href="梦境广场.html" class="logo">
+                <i class="fas fa-cloud-moon"></i>
+                梦境广场
+            </a>
+            <nav>
+                <ul>
+                    <li><a href="梦境广场.html">首页</a></li>
+                    <li><a href="梦境日记.html">梦境日记</a></li>
+                    <li><a href="奇幻碎片.html">奇幻碎片</a></li>
+                    <li><a href="同频共振.html">同频共振</a></li>
+                    <li><a href="梦旅指南.html">梦旅指南</a></li>
+                    <li><a href="关于我们.html">关于我们</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <!-- 夜梦奇遇区域 -->
+        <section class="adventure-section">
+            <h2 class="section-title">夜梦奇遇</h2>
+
+            <div class="dream-generator">
+                <h3 class="generator-title">随机造访一个梦境</h3>
+
+                <div class="dream-preview">
+                    <p class="dream-text" id="dream-content">点击下方按钮，开始你的梦境之旅...</p>
+                </div>
+
+                <div class="dream-controls">
+                    <button class="generate-button" id="generate-btn">
+                        <i class="fas fa-magic"></i> 查看梦境
+                    </button>
+                    <button class="save-button" id="save-btn" disabled>
+                        <i class="fas fa-bookmark"></i> 保存梦境
+                    </button>
+                    <button class="history-button" id="history-btn">
+                        <i class="fas fa-history"></i> 历史梦境
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 梦境探索区域 -->
+        <section class="explore-section">
+            <h2 class="section-title">梦境探索</h2>
+            <div class="dream-cards">
+                <div class="dream-card" data-id="1">
+                    <h3 class="dream-title">飞翔之梦</h3>
+                    <div class="dream-content">
+                        <p>在梦中，我像一只自由的鸟儿，翱翔在城市的上空。高楼大厦在脚下变得渺小，微风拂过脸颊，那种自由的感觉难以言表。</p>
+                        <p>我试着飞得更高，直到云层之上，阳光照在脸上，温暖而明亮。向下望去，整个城市像一幅巨大的画卷，车辆像蚂蚁一样移动，行人则小得几乎看不见。</p>
+                        <p>突然，一阵强风袭来，我开始失去平衡，急速下降。我惊恐地挣扎着，想要重新控制飞行，但却无能为力...</p>
+                    </div>
+                    <div class="dream-tags">
+                        <span class="dream-tag">自由</span>
+                        <span class="dream-tag">飞行</span>
+                        <span class="dream-tag">城市</span>
+                    </div>
+                </div>
+                <div class="dream-card" data-id="2">
+                    <h3 class="dream-title">神秘森林</h3>
+                    <div class="dream-content">
+                        <p>走进一片神秘的森林，树木高大而茂密，阳光透过树叶的缝隙洒下，形成一片片光斑。我沿着小路前行，不知道尽头等待我的是什么。</p>
+                        <p>突然，我听到一阵低沉的吼声，心中一惊，停下脚步。环顾四周，只见一只巨大的黑豹从树林中缓缓走出，它的眼睛闪烁着神秘的光芒，却并没有攻击我的意思。</p>
+                        <p>我小心翼翼地伸出手，黑豹竟然温顺地蹭了蹭我的手掌。然后，它转身向森林深处走去，我不由自主地跟着它，走进了一个从未见过的奇幻世界...</p>
+                    </div>
+                    <div class="dream-tags">
+                        <span class="dream-tag">森林</span>
+                        <span class="dream-tag">动物</span>
+                        <span class="dream-tag">神秘</span>
+                    </div>
+                </div>
+                <div class="dream-card" data-id="3">
+                    <h3 class="dream-title">海底奇遇</h3>
+                    <div class="dream-content">
+                        <p>我在海底漫步，周围是五彩斑斓的珊瑚礁和各种各样的鱼儿。突然，一只巨大的海龟游了过来，它带着我在海底畅游，仿佛进入了一个全新的世界。</p>
+                        <p>我们穿过一片美丽的水母群，它们发出柔和的光芒，照亮了整个海底。接着，我们来到了一个神秘的洞穴前，海龟用它的鳍轻轻触碰洞口，洞穴里立刻射出一道耀眼的光芒。</p>
+                        <p>我怀着好奇走进洞穴，发现里面布满了各种奇异的生物和闪闪发光的宝石。就在这时，我突然醒来，发现自己躺在床上，但那种奇妙的感觉却久久挥之不去...</p>
+                    </div>
+                    <div class="dream-tags">
+                        <span class="dream-tag">海底</span>
+                        <span class="dream-tag">海洋生物</span>
+                        <span class="dream-tag">奇幻</span>
+                    </div>
+                </div>
+                <div class="dream-card" data-id="4">
+                    <h3 class="dream-title">时光倒流</h3>
+                    <div class="dream-content">
+                        <p>我发现自己回到了童年时代，熟悉的街道、房屋和面孔让我感到既亲切又陌生。我看到了年轻时的父母，他们的笑容是那么灿烂，充满了活力。</p>
+                        <p>我试图和他们说话，但他们却看不到我，听不到我的声音。我只能默默地跟在他们身后，看着他们忙碌的身影，心中充满了感慨。</p>
+                        <p>突然，一阵强烈的光芒闪过，我发现自己回到了现在。看着镜子中略显疲惫的面容，我深深地吸了一口气，决定更加珍惜现在的生活...</p>
+                    </div>
+                    <div class="dream-tags">
+                        <span class="dream-tag">回忆</span>
+                        <span class="dream-tag">父母</span>
+                        <span class="dream-tag">时光</span>
+                    </div>
+                </div>
+                <div class="dream-card" data-id="5">
+                    <h3 class="dream-title">考试噩梦</h3>
+                    <div class="dream-content">
+                        <p>我参加了一场重要的考试，但发现自己什么都不会。时间一分一秒过去，我感到越来越紧张，手心不停地出汗。</p>
+                        <p>我试图翻阅课本，但书页却像活了一样，不停地翻动，让我无法找到需要的内容。监考老师的目光扫视着整个教室，让我感到更加不安。</p>
+                        <p>就在我几乎要绝望的时候，铃声响起，考试结束了。我看着空白的试卷，心中充满了懊悔和自责。这时，我突然醒来，发现自己躺在床上，心跳仍然很快...</p>
+                    </div>
+                    <div class="dream-tags">
+                        <span class="dream-tag">压力</span>
+                        <span class="dream-tag">考试</span>
+                        <span class="dream-tag">焦虑</span>
+                    </div>
+                </div>
+                <div class="dream-card" data-id="6">
+                    <h3 class="dream-title">会说话的动物</h3>
+                    <div class="dream-content">
+                        <p>在梦中，我发现所有的动物都会说话。我的宠物猫坐在沙发上，用人类的语言和我交谈，它告诉我它的内心感受和想法，让我感到十分惊讶。</p>
+                        <p>我走出家门，看到一只狗正在和一只鸟争论着什么。狗说它喜欢在公园里奔跑，而鸟则说它喜欢在天空中飞翔。它们的对话既有趣又富有哲理。</p>
+                        <p>我继续往前走，遇到了一只会说话的狐狸。它邀请我去参加一个动物聚会，我欣然答应了。在聚会上，各种动物们展示着它们的才艺，我度过了一段非常愉快的时光...</p>
+                    </div>
+                    <div class="dream-tags">
+                        <span class="dream-tag">动物</span>
+                        <span class="dream-tag">交流</span>
+                        <span class="dream-tag">奇幻</span>
+                    </div>
+                </div>
+            </div>
+            <button class="random-button" id="random-dream-btn">
+                随机浏览梦境 <i class="fas fa-random"></i>
+            </button>
+        </section>
+    </div>
+
+    <!-- 历史梦境弹窗 -->
+    <div class="history-modal" id="history-modal">
+        <div class="history-content">
+            <div class="history-header">
+                <div class="history-title">历史梦境</div>
+                <button class="close-history" id="close-history">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="history-list" id="history-container">
+                <!-- 历史梦境将通过JavaScript动态生成 -->
+            </div>
+        </div>
+    </div>
+
+    <!-- 页脚 -->
+    <footer>
+        <div class="container">
+            <p>© 2025 梦境广场 | 你的潜意识栖息地 ✨</p>
+            <p>在清醒世界的边缘，我们守护每一段奇幻旅程</p>
+        </div>
+    </footer>
+
+    <script>
+        // 创建星空效果
+        document.addEventListener('DOMContentLoaded', function() {
+            // 生成随机星星
+            const starsContainer = document.getElementById('stars');
+            for (let i = 0; i < 100; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.left = `${Math.random() * 100}%`;
+                star.style.top = `${Math.random() * 100}%`;
+                star.style.animationDuration = `${Math.random() * 5 + 2}s`;
+                star.style.animationDelay = `${Math.random() * 5}s`;
+                starsContainer.appendChild(star);
+            }
+
+            // 预设梦境列表
+            const dreamTemplates = [
+                "你发现自己身处一个陌生的城市，建筑都是由玻璃和水晶构成的。阳光照射下来，整个城市闪烁着七彩的光芒。你沿着街道走着，发现每个路人都面带微笑，仿佛隐藏着某种秘密...",
+                "你站在一片无边无际的草原上，微风拂过，草浪翻滚。远处有一座古老的城堡，你决定前往探索。当你走近时，城堡的大门自动打开，里面传出悠扬的音乐...",
+                "你置身于一片黑暗之中，突然，前方出现了一道光。你朝着光走去，发现那是一个巨大的洞穴入口。洞穴里闪烁着各种奇异的光芒，你小心翼翼地走了进去...",
+                "你回到了童年的家，一切都和记忆中一样。你看到了年轻时的父母，他们正在厨房里忙碌着。你想和他们说话，但却发现自己无法发出声音...",
+                "你在天空中漂浮，脚下是一片云海。你感到非常轻松和自由，仿佛没有任何烦恼。你试着向前飞行，发现自己可以随心所欲地控制方向...",
+                "你来到了一个未来世界，城市里到处都是高科技设备。人们穿着奇怪的衣服，使用着你从未见过的工具。你感到既兴奋又有些害怕...",
+                "你在森林里迷路了，四周一片漆黑。你听到了奇怪的声音，感到非常害怕。你试着寻找出路，但却越走越远。就在你几乎绝望的时候，你看到了一丝光亮...",
+                "你发现自己在一个巨大的图书馆里，书架上摆满了各种书籍。你随便拿起一本，发现里面的文字你完全看不懂。就在这时，一位老人走了过来，他告诉你这些书里藏着宇宙的秘密...",
+                "你在海里游泳，突然，你发现自己可以在水下呼吸。你感到非常惊讶，开始探索海底世界。你看到了各种各样的海洋生物，还有一艘沉没的船只...",
+                "你参加了一场盛大的派对，每个人都穿着华丽的衣服。你感到非常开心和放松，和人们聊天、跳舞。就在派对达到高潮的时候，你突然醒来了...",
+            ];
+
+            // 从本地存储加载历史梦境
+            const loadSavedDreams = () => {
+                const savedDreams = JSON.parse(localStorage.getItem('savedDreams')) || [];
+                const historyContainer = document.getElementById('history-container');
+                historyContainer.innerHTML = '';
+
+                if (savedDreams.length === 0) {
+                    historyContainer.innerHTML = '<p class="no-dreams">暂无保存的梦境</p>';
+                    return;
+                }
+
+                savedDreams.forEach(dream => {
+                    const historyItem = document.createElement('div');
+                    historyItem.className = 'history-item';
+                    historyItem.innerHTML = `
+                        <div class="history-date">${dream.date}</div>
+                        <p class="history-text">${dream.content}</p>
+                        <div class="history-actions">
+                            <button class="action-button" data-id="${dream.id}" data-action="delete">
+                                <i class="fas fa-trash"></i> 删除
+                            </button>
+                        </div>
+                    `;
+                    historyContainer.appendChild(historyItem);
+                });
+
+                // 添加删除事件监听
+                document.querySelectorAll('.action-button[data-action="delete"]').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const dreamId = this.getAttribute('data-id');
+                        deleteSavedDream(dreamId);
+                    });
+                });
+            };
+
+            // 保存梦境到本地存储
+            const saveDreamToLocalStorage = (content) => {
+                const savedDreams = JSON.parse(localStorage.getItem('savedDreams')) || [];
+                const now = new Date();
+                const dateString = `${now.getFullYear()}-${(now.getMonth() + 1).toString().padStart(2, '0')}-${now.getDate().toString().padStart(2, '0')} ${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
+                
+                const newDream = {
+                    id: Date.now().toString(),
+                    date: dateString,
+                    content: content
+                };
+
+                savedDreams.push(newDream);
+                localStorage.setItem('savedDreams', JSON.stringify(savedDreams));
+                
+                // 更新历史梦境列表
+                loadSavedDreams();
+                
+                // 显示成功提示
+                showNotification('梦境已保存到本地');
+            };
+
+            // 删除保存的梦境
+            const deleteSavedDream = (dreamId) => {
+                const savedDreams = JSON.parse(localStorage.getItem('savedDreams')) || [];
+                const updatedDreams = savedDreams.filter(dream => dream.id !== dreamId);
+                localStorage.setItem('savedDreams', JSON.stringify(updatedDreams));
+                loadSavedDreams();
+                showNotification('梦境已删除');
+            };
+
+            // 显示通知
+            const showNotification = (message) => {
+                const notification = document.createElement('div');
+                notification.className = 'fixed bottom-4 right-4 bg-primary/90 text-white py-3 px-6 rounded-lg shadow-lg transform translate-y-16 opacity-0 transition-all duration-300 z-50';
+                notification.textContent = message;
+                document.body.appendChild(notification);
+                
+                setTimeout(() => {
+                    notification.classList.remove('translate-y-16', 'opacity-0');
+                }, 100);
+                
+                setTimeout(() => {
+                    notification.classList.add('translate-y-16', 'opacity-0');
+                    setTimeout(() => {
+                        document.body.removeChild(notification);
+                    }, 300);
+                }, 3000);
+            };
+
+            // 生成随机梦境
+            const generateBtn = document.getElementById('generate-btn');
+            const saveBtn = document.getElementById('save-btn');
+            const dreamContent = document.getElementById('dream-content');
+            let currentDream = null;
+
+            generateBtn.addEventListener('click', function() {
+                // 隐藏当前梦境
+                dreamContent.classList.remove('active');
+
+                // 随机选择一个梦境
+                const randomIndex = Math.floor(Math.random() * dreamTemplates.length);
+                currentDream = dreamTemplates[randomIndex];
+
+                // 模拟加载效果
+                setTimeout(() => {
+                    dreamContent.textContent = currentDream;
+                    dreamContent.classList.add('active');
+                    saveBtn.disabled = false;
+                }, 800);
+            });
+
+            // 保存梦境
+            saveBtn.addEventListener('click', function() {
+                if (!currentDream) {
+                    showNotification('请先生成一个梦境');
+                    return;
+                }
+                
+                saveDreamToLocalStorage(currentDream);
+            });
+
+            // 历史梦境弹窗
+            const historyBtn = document.getElementById('history-btn');
+            const historyModal = document.getElementById('history-modal');
+            const closeHistory = document.getElementById('close-history');
+
+            historyBtn.addEventListener('click', function() {
+                loadSavedDreams();
+                historyModal.classList.add('active');
+            });
+
+            closeHistory.addEventListener('click', function() {
+                historyModal.classList.remove('active');
+            });
+
+            // 点击模态框背景关闭
+            historyModal.addEventListener('click', function(e) {
+                if (e.target === historyModal) {
+                    historyModal.classList.remove('active');
+                }
+            });
+
+            // 随机浏览梦境按钮
+            const randomDreamBtn = document.getElementById('random-dream-btn');
+            randomDreamBtn.addEventListener('click', function() {
+                // 随机选择一个梦境卡片
+                const dreamCards = document.querySelectorAll('.dream-card');
+                const randomIndex = Math.floor(Math.random() * dreamCards.length);
+                
+                // 滚动到随机选择的梦境卡片
+                dreamCards[randomIndex].scrollIntoView({ behavior: 'smooth', block: 'center' });
+                
+                // 添加高亮效果
+                dreamCards[randomIndex].classList.add('highlight');
+                setTimeout(() => {
+                    dreamCards[randomIndex].classList.remove('highlight');
+                }, 2000);
+            });
+
+            // 梦境卡片点击效果
+            document.querySelectorAll('.dream-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    // 放大效果
+                    this.classList.add('scale-up');
+                    setTimeout(() => {
+                        this.classList.remove('scale-up');
+                    }, 300);
+                });
+            });
+
+            // 导航栏样式
+            const currentPath = window.location.pathname;
+            document.querySelectorAll('nav a').forEach(link => {
+                if (link.getAttribute('href') === currentPath || 
+                    (currentPath.includes('梦境探索与奇遇') && link.textContent.includes('梦境探索'))) {
+                    link.classList.add('active');
+                }
+            });
+
+            // 加载历史梦境
+            loadSavedDreams();
+        });
+    </script>
+</body>
+
+</html>

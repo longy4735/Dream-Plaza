@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>睡眠与梦境 | 梦境广场</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* 保持与其他页面相同的样式基础 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #6d28d9;
+            --secondary: #8b5cf6;
+            --dark: #0f172a;
+            --light: #f8fafc;
+            --accent: #c4b5fd;
+            --text: #1e293b;
+        }
+
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            color: var(--light);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+            padding-bottom: 60px;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                radial-gradient(circle at 15% 20%, rgba(139, 92, 246, 0.1), transparent 25%),
+                radial-gradient(circle at 85% 30%, rgba(199, 210, 254, 0.1), transparent 25%),
+                radial-gradient(circle at 50% 70%, rgba(124, 58, 237, 0.1), transparent 30%);
+            z-index: -1;
+        }
+
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background-color: white;
+            border-radius: 50%;
+            animation: twinkle var(--duration, 4s) infinite var(--delay, 0s);
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; }
+            50% { opacity: 1; }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            padding: 20px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--light);
+            text-decoration: none;
+            font-family: 'Ma Shan Zheng', cursive;
+        }
+
+        .logo i {
+            color: var(--accent);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+
+        nav a {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 18px;
+            transition: all 0.3s ease;
+            position: relative;
+            padding-bottom: 5px;
+        }
+
+        nav a:hover {
+            color: white;
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            transition: width 0.3s ease;
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        .sleep-hero {
+            padding: 80px 0;
+            text-align: center;
+        }
+
+        .hero-title {
+            font-size: 50px;
+            margin-bottom: 30px;
+            font-family: 'Ma Shan Zheng', cursive;
+        }
+
+        .hero-description {
+            font-size: 20px;
+            max-width: 800px;
+            margin: 0 auto 40px;
+            color: #cbd5e1;
+        }
+
+        .sleep-cycle {
+            margin-bottom: 80px;
+        }
+
+        .section-title {
+            font-size: 36px;
+            margin-bottom: 40px;
+            font-family: 'Ma Shan Zheng', cursive;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 80px;
+            height: 3px;
+            background: var(--accent);
+        }
+
+        .cycle-card {
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(124, 58, 237, 0.2);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            margin-bottom: 30px;
+        }
+
+        .cycle-header {
+            padding: 25px;
+            background: rgba(109, 40, 217, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .cycle-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: rgba(139, 92, 246, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: var(--accent);
+        }
+
+        .cycle-title {
+            font-size: 24px;
+            color: var(--accent);
+        }
+
+        .cycle-content {
+            padding: 25px;
+            line-height: 1.6;
+            color: #cbd5e1;
+        }
+
+        .sleep-tips {
+            margin-bottom: 80px;
+        }
+
+        .tips-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .tip-card {
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(124, 58, 237, 0.2);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .tip-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(139, 92, 246, 0.5);
+        }
+
+        .tip-header {
+            padding: 25px;
+            background: rgba(109, 40, 217, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .tip-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: rgba(139, 92, 246, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: var(--accent);
+        }
+
+        .tip-title {
+            font-size: 24px;
+            color: var(--accent);
+        }
+
+        .tip-content {
+            padding: 25px;
+            line-height: 1.6;
+            color: #cbd5e1;
+        }
+
+        .tip-steps {
+            margin-top: 20px;
+            padding-left: 20px;
+        }
+
+        .tip-steps li {
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .tip-steps li::before {
+            content: '•';
+            color: var(--accent);
+            position: absolute;
+            left: -20px;
+            font-size: 20px;
+        }
+
+        .environment-setup {
+            margin-bottom: 80px;
+        }
+
+        .environment-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .environment-card {
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(124, 58, 237, 0.2);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .environment-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(139, 92, 246, 0.5);
+        }
+
+        .environment-header {
+            padding: 20px;
+            background: rgba(109, 40, 217, 0.1);
+        }
+
+        .environment-title {
+            font-size: 22px;
+            margin-bottom: 10px;
+            color: var(--accent);
+        }
+
+        .environment-content {
+            padding: 20px;
+            line-height: 1.6;
+            color: #cbd5e1;
+        }
+
+        .sleep-routine {
+            margin-bottom: 80px;
+        }
+
+        .routine-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .routine-card {
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(124, 58, 237, 0.2);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .routine-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(139, 92, 246, 0.5);
+        }
+
+        .routine-header {
+            padding: 20px;
+            background: rgba(109, 40, 217, 0.1);
+        }
+
+        .routine-title {
+            font-size: 22px;
+            margin-bottom: 10px;
+            color: var(--accent);
+        }
+
+        .routine-content {
+            padding: 20px;
+            line-height: 1.6;
+            color: #cbd5e1;
+        }
+
+        .before-bed {
+            margin-bottom: 80px;
+        }
+
+        .before-bed-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .before-bed-card {
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(124, 58, 237, 0.2);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .before-bed-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(139, 92, 246, 0.5);
+        }
+
+        .before-bed-header {
+            padding: 20px;
+            background: rgba(109, 40, 217, 0.1);
+        }
+
+        .before-bed-title {
+            font-size: 22px;
+            margin-bottom: 10px;
+            color: var(--accent);
+        }
+
+        .before-bed-content {
+            padding: 20px;
+            line-height: 1.6;
+            color: #cbd5e1;
+        }
+
+        .meditation-guide {
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(124, 58, 237, 0.2);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 80px;
+        }
+
+        .meditation-steps {
+            padding-left: 20px;
+        }
+
+        .meditation-steps li {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .meditation-steps li::before {
+            content: '•';
+            color: var(--accent);
+            position: absolute;
+            left: -20px;
+            font-size: 20px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px 0;
+            color: #94a3b8;
+            border-top: 1px solid rgba(124, 58, 237, 0.1);
+            margin-top: 60px;
+        }
+
+        @media (max-width: 900px) {
+            nav ul {
+                gap: 15px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .section-title {
+                font-size: 32px;
+            }
+
+            .logo {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 动态星星背景 -->
+    <div class="stars" id="stars"></div>
+
+    <div class="container">
+        <!-- 导航栏 -->
+        <header>
+            <a href="梦境广场.html" class="logo">
+                <i class="fas fa-cloud-moon"></i>
+                梦境广场
+            </a>
+            <nav>
+                <ul>
+                    <li><a href="梦境广场.html">首页</a></li>
+                    <li><a href="梦境日记.html">梦境日记</a></li>
+                    <li><a href="夜梦奇遇.html">夜梦奇遇</a></li>
+                    <li><a href="梦旅指南.html">梦旅指南</a></li>
+                    <li><a href="奇幻碎片.html">奇幻碎片</a></li>
+                    <li><a href="同频共振.html">同频共振</a></li>
+                    <li><a href="关于我们.html">关于我们</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <!-- 英雄区域 -->
+        <section class="sleep-hero">
+            <h1 class="hero-title">睡眠与梦境</h1>
+            <p class="hero-description">
+                了解睡眠周期与梦境的关系，改善睡眠质量，创造有利于深度梦境体验的环境和习惯。
+            </p>
+        </section>
+
+        <!-- 睡眠周期 -->
+        <section class="sleep-cycle">
+            <h2 class="section-title">睡眠周期与梦境</h2>
+            
+            <div class="cycle-card">
+                <div class="cycle-header">
+                    <div class="cycle-icon">
+                        <i class="fas fa-moon"></i>
+                    </div>
+                    <h3 class="cycle-title">非REM睡眠</h3>
+                </div>
+                <div class="cycle-content">
+                    <p>非REM睡眠分为四个阶段，从浅睡到深睡：</p>
+                    <ul>
+                        <li><strong>第一阶段</strong>：轻度睡眠，容易被唤醒，持续约5-10分钟</li>
+                        <li><strong>第二阶段</strong>：体温下降，心率减慢，脑波出现纺锤波</li>
+                        <li><strong>第三阶段</strong>：深度睡眠开始，脑波出现δ波</li>
+                        <li><strong>第四阶段</strong>：深度睡眠，难以被唤醒，身体修复和生长激素分泌</li>
+                    </ul>
+                    <p>非REM睡眠占整个睡眠周期的约75%，主要与身体恢复和修复有关。</p>
+                </div>
+            </div>
+            
+            <div class="cycle-card">
+                <div class="cycle-header">
+                    <div class="cycle-icon">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <h3 class="cycle-title">REM睡眠</h3>
+                </div>
+                <div class="cycle-content">
+                    <p>REM睡眠（快速眼动睡眠）是睡眠的一个阶段，其特点是：</p>
+                    <ul>
+                        <li>眼球快速移动</li>
+                        <li>大脑活动增强，类似清醒状态</li>
+                        <li>肌肉麻痹，防止梦境动作</li>
+                        <li>生动的梦境主要发生在这个阶段</li>
+                    </ul>
+                    <p>REM睡眠占整个睡眠周期的约25%，首次REM睡眠通常在入睡后90分钟左右出现，之后每个周期逐渐延长。</p>
+                </div>
+            </div>
+            
+            <div class="cycle-card">
+                <div class="cycle-header">
+                    <div class="cycle-icon">
+                        <i class="fas fa-repeat"></i>
+                    </div>
+                    <h3 class="cycle-title">睡眠周期循环</h3>
+                </div>
+                <div class="cycle-content">
+                    <p>每晚睡眠通常经历4-6个完整的睡眠周期，每个周期持续约90-120分钟：</p>
+                    <ol>
+                        <li>入睡后先进入非REM睡眠的第一阶段</li>
+                        <li>逐渐进入更深的阶段，然后回到浅睡</li>
+                        <li>约90分钟后，首次REM睡眠出现</li>
+                        <li>之后每个周期中，REM睡眠的时间逐渐增加</li>
+                    </ol>
+                    <p>完整的睡眠周期对身心健康至关重要，打断周期可能导致疲劳和记忆问题。</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 睡眠小贴士 -->
+        <section class="sleep-tips">
+            <h2 class="section-title">改善睡眠质量的关键</h2>
+            <div class="tips-grid">
+                <div class="tip-card">
+                    <div class="tip-header">
+                        <div class="tip-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <h3 class="tip-title">保持规律的睡眠时间</h3>
+                    </div>
+                    <div class="tip-content">
+                        <ul class="tip-steps">
+                            <li>每天在相同的时间上床睡觉和起床，即使是周末</li>
+                            <li>成年人一般需要7-9小时的睡眠时间</li>
+                            <li>建立睡前常规，例如读书、听轻音乐等</li>
+                            <li>避免白天过长时间的午睡，尤其是下午3点后</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="tip-card">
+                    <div class="tip-header">
+                        <div class="tip-icon">
+                            <i class="fas fa-home"></i>
+                        </div>
+                        <h3 class="tip-title">创造安静舒适的睡眠环境</h3>
+                    </div>
+                    <div class="tip-content">
+                        <ul class="tip-steps">
+                            <li>保持卧室黑暗、安静和凉爽（18-22°C）</li>
+                            <li>投资舒适的床垫和枕头</li>
+                            <li>使用遮光窗帘、耳塞或白噪音机</li>
+                            <li>保持卧室整洁，减少干扰</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="tip-card">
+                    <div class="tip-header">
+                        <div class="tip-icon">
+                            <i class="fas fa-bed"></i>
+                        </div>
+                        <h3 class="tip-title">建立健康的睡眠习惯</h3>
+                    </div>
+                    <div class="tip-content">
+                        <ul class="tip-steps">
+                            <li>只在卧室睡觉和亲密行为，不要在床上工作或看电视</li>
+                            <li>如果20分钟内无法入睡，离开卧室做些放松的事情</li>
+                            <li>每天进行适度的运动，但不要在睡前3小时内剧烈运动</li>
+                            <li>避免在床上使用电子设备</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="tip-card">
+                    <div class="tip-header">
+                        <div class="tip-icon">
+                            <i class="fas fa-coffee"></i>
+                        </div>
+                        <h3 class="tip-title">注意饮食和饮料</h3>
+                    </div>
+                    <div class="tip-content">
+                        <ul class="tip-steps">
+                            <li>避免在睡前4-6小时摄入咖啡因、茶和巧克力</li>
+                            <li>晚餐不要过量或过晚，避免辛辣、油腻食物</li>
+                            <li>限制晚间液体摄入，减少夜间醒来</li>
+                            <li>某些食物可能有助于睡眠，如温牛奶、香蕉、杏仁等</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 睡眠环境设置 -->
+        <section class="environment-setup">
+            <h2 class="section-title">创造理想的睡眠环境</h2>
+            <div class="environment-grid">
+                <div class="environment-card">
+                    <div class="environment-header">
+                        <h3 class="environment-title">光线控制</h3>
+                    </div>
+                    <div class="environment-content">
+                        <p>光线是影响睡眠的重要因素，特别是蓝光会抑制褪黑素的分泌：</p>
+                        <ul>
+                            <li>使用遮光窗帘或眼罩阻挡外界光线</li>
+                            <li>睡前1小时避免使用电子设备，或使用蓝光过滤眼镜</li>
+                            <li>使用暖色调的灯光，如琥珀色或红色</li>
+                            <li>早晨醒来时，立即暴露在明亮的光线下，帮助调整生物钟</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="environment-card">
+                    <div class="environment-header">
+                        <h3 class="environment-title">噪音管理</h3>
+                    </div>
+                    <div class="environment-content">
+                        <p>噪音可能干扰睡眠质量，特别是浅睡眠阶段：</p>
+                        <ul>
+                            <li>使用耳塞或白噪音机掩盖环境噪音</li>
+                            <li>自然声音，如海浪、雨声或森林音效，通常比机械声音更有助于睡眠</li>
+                            <li>如果外界噪音无法控制，可以考虑使用隔音材料</li>
+                            <li>避免突然的噪音，如闹钟，可以使用渐强的闹钟铃声</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="environment-card">
+                    <div class="environment-header">
+                        <h3 class="environment-title">温度与湿度</h3>
+                    </div>
+                    <div class="environment-content">
+                        <p>睡眠环境的温度和湿度对睡眠质量有显著影响：</p>
+                        <ul>
+                            <li>大多数人在18-22°C的温度下睡眠最佳</li>
+                            <li>使用风扇或空调调节温度</li>
+                            <li>保持湿度在40-60%之间，过高或过低都会影响睡眠</li>
+                            <li>选择透气性好的床上用品</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 日常睡眠习惯 -->
+        <section class="sleep-routine">
+            <h2 class="section-title">日常睡眠习惯</h2>
+            <div class="routine-grid">
+                <div class="routine-card">
+                    <div class="routine-header">
+                        <h3 class="routine-title">避免刺激物</h3>
+                    </div>
+                    <div class="routine-content">
+                        <p>咖啡因、尼古丁和酒精都会干扰睡眠：</p>
+                        <ul>
+                            <li>咖啡因的半衰期为4-6小时，因此下午2点后应避免摄入</li>
+                            <li>尼古丁是一种兴奋剂，戒烟有助于改善睡眠</li>
+                            <li>虽然酒精可能帮助入睡，但会干扰深度睡眠</li>
+                            <li>睡前4-6小时避免摄入这些刺激物</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="routine-card">
+                    <div class="routine-header">
+                        <h3 class="routine-title">规律运动</h3>
+                    </div>
+                    <div class="routine-content">
+                        <p>定期运动可以帮助入睡和提高睡眠质量：</p>
+                        <ul>
+                            <li>每周至少进行150分钟的中等强度有氧运动</li>
+                            <li>运动时间最好在早晨或下午，避免睡前3小时内剧烈运动</li>
+                            <li>瑜伽和普拉提等轻度运动也有助于放松身心</li>
+                            <li>即使是日常散步也能改善睡眠</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="routine-card">
+                    <div class="routine-header">
+                        <h3 class="routine-title">管理压力</h3>
+                    </div>
+                    <div class="routine-content">
+                        <p>压力和焦虑是导致失眠的常见原因：</p>
+                        <ul>
+                            <li>学习压力管理技巧，如深呼吸、冥想或渐进性肌肉松弛</li>
+                            <li>写日记记录白天的压力和担忧，帮助清空思绪</li>
+                            <li>如果思绪在夜间活跃，尝试"担忧时间"技巧，在白天专门留出时间处理担忧</li>
+                            <li>必要时寻求专业心理咨询</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 睡前放松练习 -->
+        <section class="before-bed">
+            <h2 class="section-title">睡前放松练习</h2>
+            <div class="before-bed-grid">
+                <div class="before-bed-card">
+                    <div class="before-bed-header">
+                        <h3 class="before-bed-title">冥想与正念</h3>
+                    </div>
+                    <div class="before-bed-content">
+                        <p>冥想和正念练习可以帮助平静思绪，减轻压力和焦虑：</p>
+                        <ul>
+                            <li>每天睡前进行5-10分钟的冥想</li>
+                            <li>专注于呼吸，当思绪 wandering时，轻轻将注意力带回呼吸</li>
+                            <li>可以使用引导冥想应用或音频</li>
+                            <li>正念身体扫描也是一种有效的放松方法</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="before-bed-card">
+                    <div class="before-bed-header">
+                        <h3 class="before-bed-title">深呼吸练习</h3>
+                    </div>
+                    <div class="before-bed-content">
+                        <p>深呼吸可以激活身体的放松反应：</p>
+                        <ul>
+                            <li>4-7-8呼吸法：吸气4秒，屏息7秒，呼气8秒</li>
+                            <li>腹式呼吸：用腹部而非胸部呼吸</li>
+                            <li>缓慢、有节奏的呼吸</li>
+                            <li>每天练习几次，特别是睡前</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="before-bed-card">
+                    <div class="before-bed-header">
+                        <h3 class="before-bed-title">渐进性肌肉松弛</h3>
+                    </div>
+                    <div class="before-bed-content">
+                        <p>这种方法通过交替紧张和放松肌肉群来减轻身体紧张：</p>
+                        <ul>
+                            <li>从脚部开始，逐渐向上到头部</li>
+                            <li>紧张肌肉5秒钟，然后突然放松</li>
+                            <li>注意紧张和放松之间的感觉差异</li>
+                            <li>整个过程大约需要10-15分钟</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 冥想引导 -->
+        <section class="meditation-guide">
+            <h2 class="section-title">睡前冥想引导</h2>
+            <p>以下是一个简单的睡前冥想引导，帮助你放松身心，准备进入梦乡：</p>
+            <ol class="meditation-steps">
+                <li>舒适地躺在床上，关闭灯光，将手机调至静音</li>
+                <li>闭上眼睛，做几次深呼吸，感觉空气进入和离开身体</li>
+                <li>将注意力集中在呼吸上，注意腹部或胸部的起伏</li>
+                <li>当思绪wandering时，不要评判，只是温和地将注意力带回呼吸</li>
+                <li>逐渐扫描身体，注意任何紧张或不适的区域</li>
+                <li>对这些区域进行几次深呼吸，想象紧张随着呼气离开身体</li>
+                <li>如果思绪仍然活跃，可以尝试重复一个简单的短语或咒语，如"平静"或"放松"</li>
+                <li>保持这个状态5-10分钟，或者直到感到足够放松</li>
+                <li>当准备好时，慢慢睁开眼睛，静静地躺一会儿再起身</li>
+            </ol>
+            <p>冥想需要练习，不要期望第一次就能完全平静。坚持每天练习，你会逐渐感受到它对睡眠的积极影响。</p>
+        </section>
+    </div>
+
+    <!-- 页脚 -->
+    <footer>
+        <div class="container">
+            <p>© 2025 梦境广场 | 你的潜意识栖息地 ✨</p>
+            <p>在清醒世界的边缘，我们守护每一段奇幻旅程</p>
+        </div>
+    </footer>
+
+    <script>
+        // 创建星空效果
+        document.addEventListener('DOMContentLoaded', function () {
+            const starsContainer = document.getElementById('stars');
+            const starsCount = 150;
+
+            for (let i = 0; i < starsCount; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star');
+
+                // 随机位置
+                star.style.left = `${Math.random() * 100}vw`;
+                star.style.top = `${Math.random() * 100}vh`;
+
+                // 随机大小
+                const size = Math.random() * 3;
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+
+                // 随机动画参数
+                star.style.setProperty('--duration', `${Math.random() * 8 + 2}s`);
+                star.style.setProperty('--delay', `${Math.random() * 5}s`);
+
+                starsContainer.appendChild(star);
+            }
+        });
+    </script>
+</body>
+</html>

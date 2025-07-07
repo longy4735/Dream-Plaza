@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>奇幻碎片 | 梦境广场</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #6d28d9;
+            --secondary: #8b5cf6;
+            --dark: #0f172a;
+            --light: #f8fafc;
+            --accent: #c4b5fd;
+            --text: #1e293b;
+        }
+
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            color: var(--light);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+            padding-bottom: 60px;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                radial-gradient(circle at 15% 20%, rgba(139, 92, 246, 0.1), transparent 25%),
+                radial-gradient(circle at 85% 30%, rgba(199, 210, 254, 0.1), transparent 25%),
+                radial-gradient(circle at 50% 70%, rgba(124, 58, 237, 0.1), transparent 30%);
+            z-index: -1;
+        }
+
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background-color: white;
+            border-radius: 50%;
+            animation: twinkle var(--duration, 4s) infinite var(--delay, 0s);
+        }
+
+        @keyframes twinkle {
+            0%, 100% {
+                opacity: 0.2;
+            }
+
+            50% {
+                opacity: 1;
+            }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            padding: 20px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--light);
+            text-decoration: none;
+            font-family: 'Ma Shan Zheng', cursive;
+        }
+
+        .logo i {
+            color: var(--accent);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+
+        nav a {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 18px;
+            transition: all 0.3s ease;
+            position: relative;
+            padding-bottom: 5px;
+        }
+
+        nav a:hover {
+            color: white;
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            transition: width 0.3s ease;
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        .fragments-section {
+            padding: 80px 0;
+        }
+
+        .section-title {
+            font-size: 40px;
+            margin-bottom: 60px;
+            font-family: 'Ma Shan Zheng', cursive;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: '💫';
+            position: absolute;
+            top: -25px;
+            right: -35px;
+            font-size: 26px;
+            animation: spin 6s linear infinite;
+        }
+
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .dream-fragments {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+        }
+
+        .fragment {
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(124, 58, 237, 0.2);
+            border-radius: 15px;
+            padding: 25px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .fragment:hover {
+            transform: translateY(-8px);
+            border-color: rgba(139, 92, 246, 0.5);
+            box-shadow: 0 12px 30px rgba(109, 40, 217, 0.2);
+        }
+
+        .fragment::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(var(--primary), var(--secondary), var(--primary));
+            animation: rotate 8s linear infinite;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .fragment:hover::before {
+            opacity: 0.1;
+        }
+
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .fragment-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .fragment-title {
+            font-size: 20px;
+            margin-bottom: 12px;
+            color: var(--accent);
+        }
+
+        .fragment-text {
+            color: #cbd5e1;
+            line-height: 1.6;
+            font-size: 15px;
+        }
+
+        .fragment-date {
+            color: #94a3b8;
+            font-size: 13px;
+            margin-top: 15px;
+            display: block;
+        }
+
+        .collect-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(109, 40, 217, 0.2);
+            color: var(--accent);
+            padding: 10px 20px;
+            font-size: 16px;
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 25px;
+        }
+
+        .collect-button:hover {
+            background: rgba(109, 40, 217, 0.4);
+            color: white;
+            border-color: rgba(139, 92, 246, 0.6);
+        }
+
+        .collect-button i {
+            transition: transform 0.3s ease;
+        }
+
+        .collect-button:hover i {
+            transform: scale(1.2);
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px 0;
+            color: #94a3b8;
+            border-top: 1px solid rgba(124, 58, 237, 0.1);
+            margin-top: 60px;
+        }
+
+        @media (max-width: 900px) {
+            nav ul {
+                gap: 15px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .section-title {
+                font-size: 32px;
+            }
+
+            .logo {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 动态星星背景 -->
+    <div class="stars" id="stars"></div>
+
+    <div class="container">
+        <!-- 导航栏 -->
+        <header>
+            <a href="梦境广场.html" class="logo">
+                <i class="fas fa-cloud-moon"></i>
+                梦境广场
+            </a>
+            <nav>
+                <ul>
+                    <li><a href="梦境广场.html">首页</a></li>
+                    <li><a href="梦境日记.html">梦境日记</a></li>
+                    <li><a href="夜梦奇遇.html">夜梦奇遇</a></li>
+                    <li><a href="梦旅指南.html">梦旅指南</a></li>
+                    <li><a href="同频共振.html">同频共振</a></li>
+                    <li><a href="关于我们.html">关于我们</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <!-- 奇幻碎片区域 -->
+        <section class="fragments-section">
+            <h2 class="section-title">奇幻碎片</h2>
+            <div class="dream-fragments">
+                <div class="fragment">
+                    <div class="fragment-content">
+                        <h3 class="fragment-title">破碎的镜子</h3>
+                        <p class="fragment-text">我站在一个巨大的镜子前，镜中的我突然裂成无数碎片，每一片都折射出不同的场景：有的是童年的我，有的是未来的我，还有的是从未见过的陌生人...</p>
+                        <span class="fragment-date">2024.06.12</span>
+                    </div>
+                </div>
+                <div class="fragment">
+                    <div class="fragment-content">
+                        <h3 class="fragment-title">会说话的猫</h3>
+                        <p class="fragment-text">一只黑色的猫突然开口说话，它用低沉的声音告诉我："你不是第一次来到这里。"我惊讶地问它："这里是哪里？"它只是神秘地眨了眨眼睛，然后消失在黑暗中...</p>
+                        <span class="fragment-date">2023.05.28</span>
+                    </div>
+                </div>
+                <div class="fragment">
+                    <div class="fragment-content">
+                        <h3 class="fragment-title">漂浮的城市</h3>
+                        <p class="fragment-text">城市悬浮在云端，建筑之间由透明的桥梁连接。我小心翼翼地走在桥上，向下望去，云层中隐约可见另一个一模一样的城市倒影...</p>
+                        <span class="fragment-date">2020.04.05</span>
+                    </div>
+                </div>
+                <div class="fragment">
+                    <div class="fragment-content">
+                        <h3 class="fragment-title">倒置的世界</h3>
+                        <p class="fragment-text">一切都是颠倒的：人们用手走路，鸟儿在水里游，鱼在天空飞。我试图和一个路人交谈，却发现他说的话是倒着的，我需要在脑海中把它们反过来才能理解...</p>
+                        <span class="fragment-date">2025.03.17</span>
+                    </div>
+                </div>
+                <div class="fragment">
+                    <div class="fragment-content">
+                        <h3 class="fragment-title">会飞的书</h3>
+                        <p class="fragment-text">图书馆里的书突然都飞了起来，它们在空中组成各种形状：有的变成了龙，有的变成了城堡，还有的变成了巨大的字母。我伸手抓住一本，它在我手中打开，里面的文字开始自动排列成诗...</p>
+                        <span class="fragment-date">2023.02.23</span>
+                    </div>
+                </div>
+                <div class="fragment">
+                    <div class="fragment-content">
+                        <h3 class="fragment-title">消失的钥匙</h3>
+                        <p class="fragment-text">我握着一把金色的钥匙，正要打开一扇门，突然钥匙在我手中融化了。门缓缓打开，里面是一片无尽的黑暗。我感到一阵恐惧，但同时又有一种强烈的冲动想要走进去...</p>
+                        <span class="fragment-date">2021.01.09</span>
+                    </div>
+                </div>
+            </div>
+            <button class="collect-button">
+                <i class="fas fa-moon"></i> 收集更多碎片
+            </button>
+        </section>
+    </div>
+
+    <!-- 页脚 -->
+    <footer>
+        <div class="container">
+            <p>© 2025 梦境广场 | 你的潜意识栖息地 ✨</p>
+            <p>在清醒世界的边缘，我们守护每一段奇幻旅程</p>
+        </div>
+    </footer>
+
+    <script>
+        // 创建星空效果
+        document.addEventListener('DOMContentLoaded', function () {
+            const starsContainer = document.getElementById('stars');
+            const starsCount = 150;
+
+            for (let i = 0; i < starsCount; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star');
+
+                // 随机位置
+                star.style.left = `${Math.random() * 100}vw`;
+                star.style.top = `${Math.random() * 100}vh`;
+
+                // 随机大小
+                const size = Math.random() * 3;
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+
+                // 随机动画参数
+                star.style.setProperty('--duration', `${Math.random() * 8 + 2}s`);
+                star.style.setProperty('--delay', `${Math.random() * 5}s`);
+
+                starsContainer.appendChild(star);
+            }
+
+            // 添加鼠标移动粒子效果
+            document.body.addEventListener('mousemove', function (e) {
+                const particles = document.createElement('div');
+                particles.classList.add('star');
+                particles.style.left = `${e.clientX}px`;
+                particles.style.top = `${e.clientY}px`;
+                particles.style.opacity = '0.7';
+                particles.style.animation = 'none';
+
+                starsContainer.appendChild(particles);
+
+                // 移除粒子
+                setTimeout(() => {
+                    particles.style.opacity = '0';
+                    particles.style.transition = 'opacity 1s ease';
+
+                    setTimeout(() => {
+                        starsContainer.removeChild(particles);
+                    }, 1000);
+                }, 500);
+            });
+        });
+
+        // 收集按钮功能（模拟）
+        const collectButton = document.querySelector('.collect-button');
+        collectButton.addEventListener('click', function () {
+            // 这里可以添加实际的收集碎片逻辑
+            alert('已收集新的梦境碎片！');
+        });
+    </script>
+</body>
+
+</html>

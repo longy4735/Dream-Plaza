@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>梦旅指南 | 梦境广场</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #6d28d9;
+            --secondary: #8b5cf6;
+            --dark: #0f172a;
+            --light: #f8fafc;
+            --accent: #c4b5fd;
+            --text: #1e293b;
+        }
+
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            color: var(--light);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+            padding-bottom: 60px;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                radial-gradient(circle at 15% 20%, rgba(139, 92, 246, 0.1), transparent 25%),
+                radial-gradient(circle at 85% 30%, rgba(199, 210, 254, 0.1), transparent 25%),
+                radial-gradient(circle at 50% 70%, rgba(124, 58, 237, 0.1), transparent 30%);
+            z-index: -1;
+        }
+
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background-color: white;
+            border-radius: 50%;
+            animation: twinkle var(--duration, 4s) infinite var(--delay, 0s);
+        }
+
+        @keyframes twinkle {
+            0%, 100% {
+                opacity: 0.2;
+            }
+
+            50% {
+                opacity: 1;
+            }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            padding: 20px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--light);
+            text-decoration: none;
+            font-family: 'Ma Shan Zheng', cursive;
+        }
+
+        .logo i {
+            color: var(--accent);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+
+        nav a {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 18px;
+            transition: all 0.3s ease;
+            position: relative;
+            padding-bottom: 5px;
+        }
+
+        nav a:hover {
+            color: white;
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            transition: width 0.3s ease;
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        .guide-section {
+            padding: 80px 0;
+        }
+
+        .section-title {
+            font-size: 40px;
+            margin-bottom: 60px;
+            font-family: 'Ma Shan Zheng', cursive;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: '📖';
+            position: absolute;
+            top: -25px;
+            right: -35px;
+            font-size: 26px;
+            animation: spin 6s linear infinite;
+        }
+
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .guide-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+        }
+
+        .guide-card {
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(124, 58, 237, 0.2);
+            border-radius: 20px;
+            padding: 35px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .guide-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(139, 92, 246, 0.1), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .guide-card:hover::before {
+            left: 100%;
+        }
+
+        .guide-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(139, 92, 246, 0.5);
+            box-shadow: 0 15px 35px rgba(109, 40, 217, 0.2);
+        }
+
+        .guide-icon {
+            font-size: 36px;
+            color: var(--accent);
+            margin-bottom: 20px;
+            display: inline-block;
+            transition: transform 0.3s ease;
+        }
+
+        .guide-card:hover .guide-icon {
+            transform: rotate(5deg) scale(1.1);
+        }
+
+        .guide-title {
+            font-size: 24px;
+            margin-bottom: 15px;
+            color: var(--accent);
+        }
+
+        .guide-content {
+            color: #cbd5e1;
+            line-height: 1.8;
+        }
+
+        .guide-content ul {
+            list-style: none;
+            margin-top: 15px;
+        }
+
+        .guide-content li {
+            margin-bottom: 10px;
+            position: relative;
+            padding-left: 25px;
+        }
+
+        .guide-content li::before {
+            content: '🌙';
+            position: absolute;
+            left: 0;
+            top: 2px;
+        }
+
+        .begin-journey {
+            margin-top: 70px;
+            text-align: center;
+        }
+
+        .journey-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 15px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 18px 50px;
+            font-size: 22px;
+            font-weight: 500;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(109, 40, 217, 0.5);
+            font-family: 'Ma Shan Zheng', cursive;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .journey-button::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+            transform: scale(0);
+            transition: transform 0.5s ease;
+        }
+
+        .journey-button:hover::before {
+            transform: scale(1);
+        }
+
+        .journey-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(253, 252, 255, 0.7);
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px 0;
+            color: #94a3b8;
+            border-top: 1px solid rgba(124, 58, 237, 0.1);
+            margin-top: 60px;
+        }
+
+        @media (max-width: 900px) {
+            nav ul {
+                gap: 15px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .section-title {
+                font-size: 32px;
+            }
+
+            .logo {
+                font-size: 24px;
+            }
+        }
+    
+        .link-title {
+            color: var(--primary); /* 使用主色调 */
+            text-decoration: none;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .link-title::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            transition: width 0.3s ease;
+        }
+
+        .link-title:hover {
+            color: white;
+        }
+
+        .link-title:hover::after {
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 动态星星背景 -->
+    <div class="stars" id="stars"></div>
+
+    <div class="container">
+        <!-- 导航栏 -->
+        <header>
+            <a href="梦境广场.html" class="logo">
+                <i class="fas fa-cloud-moon"></i>
+                梦境广场
+            </a>
+            <nav>
+                <ul>
+                    <li><a href="梦境广场.html">首页</a></li>
+                    <li><a href="梦境日记.html">梦境日记</a></li>
+                    <li><a href="夜梦奇遇.html">夜梦奇遇</a></li>
+                    <li><a href="奇幻碎片.html">奇幻碎片</a></li>
+                    <li><a href="同频共振.html">同频共振</a></li>
+                    <li><a href="关于我们.html">关于我们</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <!-- 梦旅指南区域 -->
+        <section class="guide-section">
+            <h2 class="section-title">梦旅指南</h2>
+            <div class="guide-cards">
+                <div class="guide-card">
+                    <div class="guide-icon">
+                        <i class="fas fa-moon"></i>
+                    </div>
+                    <h3 class="guide-title"> <a href="梦境解析.html" class="link-title">梦境解析</a></h3>
+                    <div class="guide-content">
+                        <p>探索梦境背后的心理学意义，了解常见梦境符号的象征意义，掌握解析自己梦境的基本方法。</p>
+                        <ul>
+                            <li>飞行梦境：象征自由与突破</li>
+                            <li>坠落梦境：可能与不安全感相关</li>
+                            <li>被追逐梦境：反映逃避现实压力</li>
+                            <li>考试梦境：通常与焦虑和责任感有关</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="guide-card">
+                    <div class="guide-icon">
+                        <i class="fas fa-book"></i>
+                    </div>
+                    <h3 class="guide-title"> <a href="梦境日记.html" class="link-title">梦境记录</a></h3>
+                    <div class="guide-content">
+                        <p>学习如何有效记录梦境，提高梦境回忆能力，建立个人梦境档案，追踪梦境主题和变化。</p>
+                        <ul>
+                            <li>床边放置纸笔或使用手机记录</li>
+                            <li>醒来后保持不动，回忆梦境细节</li>
+                            <li>记录情绪、颜色、人物和场景</li>
+                            <li>定期回顾梦境日记寻找模式</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="guide-card">
+                    <div class="guide-icon">
+                        <i class="fas fa-lightbulb"></i>
+                    </div>
+                    <h3 class="guide-title"> <a href="清醒梦技巧.html" class="link-title">清醒梦技巧</a></h3>
+                    <div class="guide-content">
+                        <p>掌握清醒梦的诱导方法，在梦中保持觉知，控制梦境情节，实现创造性探索和心理成长。</p>
+                        <ul>
+                            <li>现实检查：日常中养成质疑现实的习惯</li>
+                            <li>梦境回顾：提高对梦境的敏感度</li>
+                            <li>WILD技术：从清醒状态直接进入梦境</li>
+                            <li>MILD技术：在梦中意识到自己在做梦</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="guide-card">
+                    <div class="guide-icon">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                    <h3 class="guide-title"> <a href="梦境疗愈.html" class="link-title">梦境疗愈</a></h3>
+                    <div class="guide-content">
+                        <p>利用梦境进行情绪疏导、创伤疗愈和自我成长，通过梦境工作解决现实生活中的挑战。</p>
+                        <ul>
+                            <li>与梦中人物对话获取洞察</li>
+                            <li>重新演绎噩梦转化恐惧</li>
+                            <li>寻找梦中的指导和启示</li>
+                            <li>利用梦境激发创造力和灵感</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="guide-card">
+                <div class="guide-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3 class="guide-title">
+                        <a href="梦境社区.html" class="link-title">梦境社区</a>
+                    </h3>
+                    <div class="guide-content">
+                        <p>参与梦境分享和讨论，与其他梦旅人交流经验，加入主题小组，共同探索潜意识世界。在这里，你可以：</p>
+                        <ul>
+                            <li>分享梦境故事获取不同视角</li>
+                            <li>参与集体梦境实验和挑战</li>
+                            <li>寻找梦境导师和学习伙伴</li>
+                            <li>参加线下和线上梦境工作坊</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="guide-card">
+                    <div class="guide-icon">
+                        <i class="fas fa-candle"></i>
+                    </div>
+                    <h3 class="guide-title">
+                         <a href="睡眠与梦境.html" class="link-title">睡眠与梦境</a>
+                        </h3>
+                    <div class="guide-content">
+                        <p>了解睡眠周期与梦境的关系，改善睡眠质量，创造有利于深度梦境体验的环境和习惯。</p>
+                        <ul>
+                            <li>保持规律的睡眠时间</li>
+                            <li>创造安静舒适的睡眠环境</li>
+                            <li>睡前放松练习：冥想、呼吸</li>
+                            <li>避免睡前使用电子设备</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="begin-journey">
+                 <a href="夜梦奇遇.html" style="text-decoration: none;">
+        <button class="journey-button">
+            开启你的梦旅 <i class="fas fa-compass"></i>
+        </button>
+    </a>
+            </div>
+        </section>
+    </div>
+
+    <!-- 页脚 -->
+    <footer>
+        <div class="container">
+            <p>© 2025 梦境广场 | 你的潜意识栖息地 ✨</p>
+            <p>在清醒世界的边缘，我们守护每一段奇幻旅程</p>
+        </div>
+    </footer>
+
+    <script>
+        // 创建星空效果
+        document.addEventListener('DOMContentLoaded', function () {
+            const starsContainer = document.getElementById('stars');
+            const starsCount = 150;
+
+            for (let i = 0; i < starsCount; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star');
+
+                // 随机位置
+                star.style.left = `${Math.random() * 100}vw`;
+                star.style.top = `${Math.random() * 100}vh`;
+
+                // 随机大小
+                const size = Math.random() * 3;
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+
+                // 随机动画参数
+                star.style.setProperty('--duration', `${Math.random() * 8 + 2}s`);
+                star.style.setProperty('--delay', `${Math.random() * 5}s`);
+
+                starsContainer.appendChild(star);
+            }
+
+            // 添加鼠标移动粒子效果
+            document.body.addEventListener('mousemove', function (e) {
+                const particles = document.createElement('div');
+                particles.classList.add('star');
+                particles.style.left = `${e.clientX}px`;
+                particles.style.top = `${e.clientY}px`;
+                particles.style.opacity = '0.7';
+                particles.style.animation = 'none';
+
+                starsContainer.appendChild(particles);
+
+                // 移除粒子
+                setTimeout(() => {
+                    particles.style.opacity = '0';
+                    particles.style.transition = 'opacity 1s ease';
+
+                    setTimeout(() => {
+                        starsContainer.removeChild(particles);
+                    }, 1000);
+                }, 500);
+            });
+        });
+
+        // 开始旅程按钮功能（模拟）
+        const journeyButton = document.querySelector('.journey-button');
+        journeyButton.addEventListener('click', function () {
+            // 这里可以添加实际的引导流程
+            alert('欢迎开启你的梦境探索之旅！');
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>同频共振 | 梦境广场</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* 保持与其他页面相同的样式 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #6d28d9;
+            --secondary: #8b5cf6;
+            --dark: #0f172a;
+            --light: #f8fafc;
+            --accent: #c4b5fd;
+            --text: #1e293b;
+        }
+
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            color: var(--light);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+            padding-bottom: 60px;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                radial-gradient(circle at 15% 20%, rgba(139, 92, 246, 0.1), transparent 25%),
+                radial-gradient(circle at 85% 30%, rgba(199, 210, 254, 0.1), transparent 25%),
+                radial-gradient(circle at 50% 70%, rgba(124, 58, 237, 0.1), transparent 30%);
+            z-index: -1;
+        }
+
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background-color: white;
+            border-radius: 50%;
+            animation: twinkle var(--duration, 4s) infinite var(--delay, 0s);
+        }
+
+        @keyframes twinkle {
+            0%,
+            100% {
+                opacity: 0.2;
+            }
+
+            50% {
+                opacity: 1;
+            }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            padding: 20px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--light);
+            text-decoration: none;
+            font-family: 'Ma Shan Zheng', cursive;
+        }
+
+        .logo i {
+            color: var(--accent);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+
+        nav a {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 18px;
+            transition: all 0.3s ease;
+            position: relative;
+            padding-bottom: 5px;
+        }
+
+        nav a:hover {
+            color: white;
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            transition: width 0.3s ease;
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        .resonance-section {
+            padding: 80px 0;
+        }
+
+        .section-title {
+            font-size: 40px;
+            margin-bottom: 60px;
+            font-family: 'Ma Shan Zheng', cursive;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: '🔄';
+            position: absolute;
+            top: -25px;
+            right: -35px;
+            font-size: 26px;
+            animation: spin 6s linear infinite;
+        }
+
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .search-container {
+            max-width: 800px;
+            margin: 0 auto 60px;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 18px 20px;
+            padding-right: 60px;
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(124, 58, 237, 0.2);
+            border-radius: 50px;
+            color: var(--light);
+            font-size: 18px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            border-color: rgba(139, 92, 246, 0.5);
+            box-shadow: 0 0 15px rgba(109, 40, 217, 0.2);
+        }
+
+        .search-button {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--accent);
+            font-size: 24px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .search-button:hover {
+            color: white;
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .filter-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin: 30px 0;
+        }
+
+        .filter-tag {
+            padding: 8px 20px;
+            background: rgba(30, 41, 59, 0.6);
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 15px;
+        }
+
+        .filter-tag:hover,
+        .filter-tag.active {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+        }
+
+        .dreamers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .dreamer-card {
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(124, 58, 237, 0.2);
+            border-radius: 20px;
+            padding: 25px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .dreamer-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(139, 92, 246, 0.5);
+            box-shadow: 0 10px 25px rgba(109, 40, 217, 0.2);
+        }
+
+        .dreamer-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: rgba(139, 92, 246, 0.2);
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            color: var(--accent);
+        }
+
+        .dreamer-name {
+            font-size: 20px;
+            margin-bottom: 10px;
+            color: var(--accent);
+            text-align: center;
+        }
+
+        .dreamer-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 15px 0;
+        }
+
+        .dreamer-tag {
+            padding: 5px 12px;
+            background: rgba(139, 92, 246, 0.1);
+            border-radius: 20px;
+            font-size: 13px;
+            color: #cbd5e1;
+        }
+
+        .dreamer-dream {
+            font-size: 15px;
+            color: #cbd5e1;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            max-height: 100px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .dreamer-dream::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 40px;
+            background: linear-gradient(to bottom, transparent, rgba(15, 23, 42, 0.8));
+        }
+
+        .connection-strength {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--accent);
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+
+        .connection-bar {
+            flex: 1;
+            height: 6px;
+            background: rgba(139, 92, 246, 0.2);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .connection-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 3px;
+        }
+
+        .interaction-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .connect-button,
+        .message-button {
+            flex: 1;
+            padding: 10px 15px;
+            border-radius: 50px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 15px;
+        }
+
+        .connect-button {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+        }
+
+        .connect-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(109, 40, 217, 0.3);
+        }
+
+        .message-button {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--accent);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+        }
+
+        .message-button:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 60px;
+        }
+
+        .page-button {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(30, 41, 59, 0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .page-button:hover,
+        .page-button.active {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px 0;
+            color: #94a3b8;
+            border-top: 1px solid rgba(124, 58, 237, 0.1);
+            margin-top: 60px;
+        }
+
+        @media (max-width: 900px) {
+            nav ul {
+                gap: 15px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .section-title {
+                font-size: 32px;
+            }
+
+            .logo {
+                font-size: 24px;
+            }
+        }
+
+        /* 新增：隐藏所有内容区域，除了默认显示的区域 */
+        .content {
+            display: none;
+        }
+
+        .content.active {
+            display: grid;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 动态星星背景 -->
+    <div class="stars" id="stars"></div>
+
+    <div class="container">
+        <!-- 导航栏 -->
+        <header>
+            <a href="梦境广场.html" class="logo">
+                <i class="fas fa-cloud-moon"></i>
+                梦境广场
+            </a>
+            <nav>
+                <ul>
+                    <li><a href="梦境广场.html">首页</a></li>
+                    <li><a href="梦境日记.html">梦境日记</a></li>
+                    <li><a href="夜梦奇遇.html">夜梦奇遇</a></li>
+                    <li><a href="梦旅指南.html">梦旅指南</a></li>
+                    <li><a href="奇幻碎片.html">奇幻碎片</a></li>
+                    <li><a href="关于我们.html">关于我们</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <!-- 同频共振区域 -->
+        <section class="resonance-section">
+            <h2 class="section-title">同频共振</h2>
+
+            <div class="search-container">
+                <input type="text" class="search-input" placeholder="搜索与你梦境相似的梦旅人...">
+                <button class="search-button">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+
+            <div class="filter-options">
+                <div class="filter-tag active" data-target="all">全部</div>
+                <div class="filter-tag" data-target="flying">飞翔</div>
+                <div class="filter-tag" data-target="falling">坠落</div>
+                <div class="filter-tag" data-target="chased">被追逐</div>
+                <div class="filter-tag" data-target="exam">考试</div>
+                <div class="filter-tag" data-target="out-of-control">失去控制</div>
+                <div class="filter-tag" data-target="stranger">陌生人</div>
+                <div class="filter-tag" data-target="water">水</div>
+                <div class="filter-tag" data-target="fire">火</div>
+                <div class="filter-tag" data-target="animal">动物</div>
+                <div class="filter-tag" data-target="supernatural">超自然</div>
+            </div>
+
+            <!-- 全部内容区域 -->
+            <div class="dreamers-grid content active" id="all">
+                <div class="dreamer-card">
+                    <div class="dreamer-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <h3 class="dreamer-name">晓梦迷蝶</h3>
+                    <div class="connection-strength">
+                        <span>梦境相似度:</span>
+                        <div class="connection-bar">
+                            <div class="connection-fill" style="width: 85%"></div>
+                        </div>
+                        <span>85%</span>
+                    </div>
+                    <div class="dreamer-tags">
+                        <div class="dreamer-tag">飞翔</div>
+                        <div class="dreamer-tag">天空</div>
+                        <div class="dreamer-tag">自由</div>
+                    </div>
+                    <p class="dreamer-dream">
+                        我在城市上空自由飞翔，脚下是熟悉的街道却又有些不同。我试着飞得更高，感受风在耳边呼啸，那种自由的感觉难以言表...
+                    </p>
+                    <div class="interaction-buttons">
+                        <button class="connect-button">
+                            <i class="fas fa-handshake"></i> 联系
+                        </button>
+                        <button class="message-button">
+                            <i class="fas fa-paper-plane"></i> 私信
+                        </button>
+                    </div>
+                </div>
+
+                <div class="dreamer-card">
+                    <div class="dreamer-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <h3 class="dreamer-name">深海潜行者</h3>
+                    <div class="connection-strength">
+                        <span>梦境相似度:</span>
+                        <div class="connection-bar">
+                            <div class="connection-fill" style="width: 72%"></div>
+                        </div>
+                        <span>72%</span>
+                    </div>
+                    <div class="dreamer-tags">
+                        <div class="dreamer-tag">水</div>
+                        <div class="dreamer-tag">海底</div>
+                        <div class="dreamer-tag">神秘</div>
+                    </div>
+                    <p class="dreamer-dream">
+                        我在一片深蓝色的海洋中游泳，周围是各种美丽的鱼和发光的生物。我发现自己可以在水中呼吸，探索这个神秘的海底世界...
+                    </p>
+                    <div class="interaction-buttons">
+                        <button class="connect-button">
+                            <i class="fas fa-handshake"></i> 联系
+                        </button>
+                        <button class="message-button">
+                            <i class="fas fa-paper-plane"></i> 私信
+                        </button>
+                    </div>
+                </div>
+
+                <div class="dreamer-card">
+                    <div class="dreamer-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <h3 class="dreamer-name">暗夜行者</h3>
+                    <div class="connection-strength">
+                        <span>梦境相似度:</span>
+                        <div class="connection-bar">
+                            <div class="connection-fill" style="width: 68%"></div>
+                        </div>
+                        <span>68%</span>
+                    </div>
+                    <div class="dreamer-tags">
+                        <div class="dreamer-tag">被追逐</div>
+                        <div class="dreamer-tag">恐惧</div>
+                        <div class="dreamer-tag">逃跑</div>
+                    </div>
+                    <p class="dreamer-dream">
+                        我在一个黑暗的森林中被某种未知的生物追逐。我拼命逃跑，但双腿好像变得沉重，每一步都很艰难...
+                    </p>
+                    <div class="interaction-buttons">
+                        <button class="connect-button">
+                            <i class="fas fa-handshake"></i> 联系
+                        </button>
+                        <button class="message-button">
+                            <i class="fas fa-paper-plane"></i> 私信
+                        </button>
+                    </div>
+                </div>
+
+                <div class="dreamer-card">
+                    <div class="dreamer-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <h3 class="dreamer-name">时空旅人</h3>
+                    <div class="connection-strength">
+                        <span>梦境相似度:</span>
+                        <div class="connection-bar">
+                            <div class="connection-fill" style="width: 79%"></div>
+                        </div>
+                        <span>79%</span>
+                    </div>
+                    <div class="dreamer-tags">
+                        <div class="dreamer-tag">穿越</div>
+                        <div class="dreamer-tag">历史</div>
+                        <div class="dreamer-tag">未来</div>
+                    </div>
+                    <p class="dreamer-dream">
+                        我发现自己穿越到了一个陌生的时代，周围的建筑和人们都很奇怪。我试图寻找回去的方法，但一切都显得那么不真实...
+                    </p>
+                    <div class="interaction-buttons">
+                        <button class="connect-button">
+                            <i class="fas fa-handshake"></i> 联系
+                        </button>
+                        <button class="message-button">
+                            <i class="fas fa-paper-plane"></i> 私信
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 飞翔内容区域 -->
+            <div class="dreamers-grid content" id="flying">
+                <div class="dreamer-card">
+                    <div class="dreamer-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <h3 class="dreamer-name">晓梦迷蝶</h3>
+                    <div class="connection-strength">
+                        <span>梦境相似度:</span>
+                        <div class="connection-bar">
+                            <div class="connection-fill" style="width: 85%"></div>
+                        </div>
+                        <span>85%</span>
+                    </div>
+                    <div class="dreamer-tags">
+                        <div class="dreamer-tag">飞翔</div>
+                        <div class="dreamer-tag">天空</div>
+                        <div class="dreamer-tag">自由</div>
+                    </div>
+                    <p class="dreamer-dream">
+                        我在城市上空自由飞翔，脚下是熟悉的街道却又有些不同。我试着飞得更高，感受风在耳边呼啸，那种自由的感觉难以言表...
+                    </p>
+                    <div class="interaction-buttons">
+                        <button class="connect-button">
+                            <i class="fas fa-handshake"></i> 联系
+                        </button>
+                        <button class="message-button">
+                            <i class="fas fa-paper-plane"></i> 私信
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 坠落内容区域 -->
+            <div class="dreamers-grid content" id="falling">
+                <!-- 这里可以添加坠落相关的梦境卡片 -->
+                <div class="dreamer-card">
+                    <div class="dreamer-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <h3 class="dreamer-name">坠落梦者</h3>
+                    <div class="connection-strength">
+                        <span>梦境相似度:</span>
+                        <div class="connection-bar">
+                            <div class="connection-fill" style="width: 70%"></div>
+                        </div>
+                        <span>70%</span>
+                    </div>
+                    <div class="dreamer-tags">
+                        <div class="dreamer-tag">坠落</div>
+                        <div class="dreamer-tag">恐惧</div>
+                    </div>
+                    <p class="dreamer-dream">
+                        我从高空坠落，风在耳边呼啸，心中充满了恐惧。我试图抓住什么，但却无能为力...
+                    </p>
+                    <div class="interaction-buttons">
+                        <button class="connect-button">
+                            <i class="fas fa-handshake"></i> 联系
+                        </button>
+                        <button class="message-button">
+                            <i class="fas fa-paper-plane"></i> 私信
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 被追逐内容区域 -->
+            <div class="dreamers-grid content" id="chased">
+                <div class="dreamer-card">
+                    <div class="dreamer-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <h3 class="dreamer-name">暗夜行者</h3>
+                    <div class="connection-strength">
+                        <span>梦境相似度:</span>
+                        <div class="connection-bar">
+                            <div class="connection-fill" style="width: 68%"></div>
+                        </div>
+                        <span>68%</span>
+                    </div>
+                    <div class="dreamer-tags">
+                        <div class="dreamer-tag">被追逐</div>
+                        <div class="dreamer-tag">恐惧</div>
+                        <div class="dreamer-tag">逃跑</div>
+                    </div>
+                    <p class="dreamer-dream">
+                        我在一个黑暗的森林中被某种未知的生物追逐。我拼命逃跑，但双腿好像变得沉重，每一步都很艰难...
+                    </p>
+                    <div class="interaction-buttons">
+                        <button class="connect-button">
+                            <i class="fas fa-handshake"></i> 联系
+                        </button>
+                        <button class="message-button">
+                            <i class="fas fa-paper-plane"></i> 私信
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 考试内容区域 -->
+            <div class="dreamers-grid content" id="exam">
+                <!-- 这里可以添加考试相关的梦境卡片 -->
+                <div class="dreamer-card">
+                    <div class="dreamer-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <h3 class="dreamer-name">考试焦虑者</h3>
+                    <div class="connection-strength">
+                        <span>梦境相似度:</span>
+                        <div class="connection-bar">
+                            <div class="connection-fill" style="width: 65%"></div>
+                        </div>
+                        <span>65%</span>
+                    </div>
+                    <div class="dreamer-tags">
+                        <div class="dreamer-tag">考试</div>
+                        <div class="dreamer-tag">紧张</div>
+                    </div>
+                    <p class="dreamer-dream">
+                        我坐在考场上，看着试卷上的题目，脑子一片空白。时间一分一秒地过去，我却一个字也写不出来...
+                    </p>
+                    <div class="interaction-buttons">
+                        <button class="connect-button">
+                            <i class="fas fa-handshake"></i> 联系
+                        </button>
+                        <button class="message-button">
+                            <i class="fas fa-paper-plane"></i> 私信
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 失去控制内容区域 -->
+            <div class="dreamers-grid content" id="out-of-control">
+                <!-- 这里可以添加失去控制相关的梦境卡片 -->
+            </div>
+
+            <!-- 陌生人内容区域 -->
+            <div class="dreamers-grid content" id="stranger">
+                <!-- 这里可以添加陌生人相关的梦境卡片 -->
+            </div>
+
+            <!-- 水内容区域 -->
+            <div class="dreamers-grid content" id="water">
+                <div class="dreamer-card">
+                    <div class="dreamer-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <h3 class="dreamer-name">深海潜行者</h3>
+                    <div class="connection-strength">
+                        <span>梦境相似度:</span>
+                        <div class="connection-bar">
+                            <div class="connection-fill" style="width: 72%"></div>
+                        </div>
+                        <span>72%</span>
+                    </div>
+                    <div class="dreamer-tags">
+                        <div class="dreamer-tag">水</div>
+                        <div class="dreamer-tag">海底</div>
+                        <div class="dreamer-tag">神秘</div>
+                    </div>
+                    <p class="dreamer-dream">
+                        我在一片深蓝色的海洋中游泳，周围是各种美丽的鱼和发光的生物。我发现自己可以在水中呼吸，探索这个神秘的海底世界...
+                    </p>
+                    <div class="interaction-buttons">
+                        <button class="connect-button">
+                            <i class="fas fa-handshake"></i> 联系
+                        </button>
+                        <button class="message-button">
+                            <i class="fas fa-paper-plane"></i> 私信
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 火内容区域 -->
+            <div class="dreamers-grid content" id="fire">
+                <!-- 这里可以添加火相关的梦境卡片 -->
+            </div>
+
+            <!-- 动物内容区域 -->
+            <div class="dreamers-grid content" id="animal">
+                <!-- 这里可以添加动物相关的梦境卡片 -->
+            </div>
+
+            <!-- 超自然内容区域 -->
+            <div class="dreamers-grid content" id="supernatural">
+                <!-- 这里可以添加超自然相关的梦境卡片 -->
+            </div>
+
+            <div class="pagination">
+                <div class="page-button">
+                    <i class="fas fa-chevron-left"></i>
+                </div>
+                <div class="page-button active">1</div>
+                <div class="page-button">2</div>
+                <div class="page-button">3</div>
+                <div class="page-button">4</div>
+                <div class="page-button">5</div>
+                <div class="page-button">
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- 页脚 -->
+    <footer>
+        <div class="container">
+            <p>© 2025 梦境广场 | 你的潜意识栖息地 ✨</p>
+            <p>在清醒世界的边缘，我们守护每一段奇幻旅程</p>
+        </div>
+    </footer>
+
+    <script>
+        // 创建星空效果
+        document.addEventListener('DOMContentLoaded', function () {
+            const starsContainer = document.getElementById('stars');
+            const starsCount = 150;
+
+            for (let i = 0; i < starsCount; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star');
+
+                // 随机位置
+                star.style.left = `${Math.random() * 100}vw`;
+                star.style.top = `${Math.random() * 100}vh`;
+
+                // 随机大小
+                const size = Math.random() * 3;
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+
+                // 随机动画参数
+                star.style.setProperty('--duration', `${Math.random() * 8 + 2}s`);
+                star.style.setProperty('--delay', `${Math.random() * 5}s`);
+
+                starsContainer.appendChild(star);
+            }
+
+            // 添加鼠标移动粒子效果
+            document.body.addEventListener('mousemove', function (e) {
+                const particles = document.createElement('div');
+                particles.classList.add('star');
+                particles.style.left = `${e.clientX}px`;
+                particles.style.top = `${e.clientY}px`;
+                particles.style.opacity = '0.7';
+                particles.style.animation = 'none';
+
+                starsContainer.appendChild(particles);
+
+                // 移除粒子
+                setTimeout(() => {
+                    particles.style.opacity = '0';
+                    particles.style.transition = 'opacity 1s ease';
+
+                    setTimeout(() => {
+                        starsContainer.removeChild(particles);
+                    }, 1000);
+                }, 500);
+            });
+
+            // 过滤器标签点击事件
+            const filterTags = document.querySelectorAll('.filter-tag');
+            filterTags.forEach(tag => {
+                tag.addEventListener('click', function () {
+                    // 移除所有标签的active类
+                    filterTags.forEach(t => t.classList.remove('active'));
+                    // 为当前点击的标签添加active类
+                    this.classList.add('active');
+
+                    // 获取目标内容区域的ID
+                    const target = this.dataset.target;
+                    const contents = document.querySelectorAll('.content');
+                    contents.forEach(content => {
+                        content.classList.remove('active');
+                        if (content.id === target) {
+                            content.classList.add('active');
+                        }
+                    });
+                });
+            });
+
+            // 分页按钮点击事件
+            const pageButtons = document.querySelectorAll('.page-button');
+            pageButtons.forEach(button => {
+                button.addEventListener('click', function () {
+                    // 移除所有按钮的active类
+                    pageButtons.forEach(b => b.classList.remove('active'));
+                    // 为当前点击的按钮添加active类
+                    this.classList.add('active');
+
+                    // 这里可以添加实际的分页逻辑
+                    console.log('切换到第', this.textContent, '页');
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>

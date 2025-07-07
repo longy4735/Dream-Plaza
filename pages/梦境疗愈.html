@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>梦境疗愈 | 梦境广场</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* 保持与其他页面相同的样式基础 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #6d28d9;
+            --secondary: #8b5cf6;
+            --dark: #0f172a;
+            --light: #f8fafc;
+            --accent: #c4b5fd;
+            --text: #1e293b;
+        }
+
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            color: var(--light);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+            padding-bottom: 60px;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                radial-gradient(circle at 15% 20%, rgba(139, 92, 246, 0.1), transparent 25%),
+                radial-gradient(circle at 85% 30%, rgba(199, 210, 254, 0.1), transparent 25%),
+                radial-gradient(circle at 50% 70%, rgba(124, 58, 237, 0.1), transparent 30%);
+            z-index: -1;
+        }
+
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background-color: white;
+            border-radius: 50%;
+            animation: twinkle var(--duration, 4s) infinite var(--delay, 0s);
+        }
+
+        @keyframes twinkle {
+            0%,
+            100% {
+                opacity: 0.2;
+            }
+
+            50% {
+                opacity: 1;
+            }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            padding: 20px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--light);
+            text-decoration: none;
+            font-family: 'Ma Shan Zheng', cursive;
+        }
+
+        .logo i {
+            color: var(--accent);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+
+        nav a {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 18px;
+            transition: all 0.3s ease;
+            position: relative;
+            padding-bottom: 5px;
+        }
+
+        nav a:hover {
+            color: white;
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            transition: width 0.3s ease;
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        .healing-hero {
+            padding: 80px 0;
+            text-align: center;
+        }
+
+        .hero-title {
+            font-size: 50px;
+            margin-bottom: 30px;
+            font-family: 'Ma Shan Zheng', cursive;
+        }
+
+        .hero-description {
+            font-size: 20px;
+            max-width: 800px;
+            margin: 0 auto 40px;
+            color: #cbd5e1;
+        }
+
+        .healing-methods {
+            margin-bottom: 80px;
+        }
+
+        .section-title {
+            font-size: 36px;
+            margin-bottom: 40px;
+            font-family: 'Ma Shan Zheng', cursive;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 80px;
+            height: 3px;
+            background: var(--accent);
+        }
+
+        .method-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .method-card {
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(124, 58, 237, 0.2);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 30px;
+        }
+
+        .method-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(139, 92, 246, 0.5);
+        }
+
+        .method-icon {
+            position: absolute;
+            top: -30px;
+            right: -30px;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: rgba(139, 92, 246, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            color: var(--accent);
+            border: 1px solid rgba(124, 58, 237, 0.2);
+        }
+
+        .method-title {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: var(--accent);
+            position: relative;
+            z-index: 1;
+        }
+
+        .method-content {
+            line-height: 1.6;
+            color: #cbd5e1;
+            position: relative;
+            z-index: 1;
+        }
+
+        .method-steps {
+            margin-top: 20px;
+            padding-left: 20px;
+        }
+
+        .method-steps li {
+            margin-bottom: 10px;
+            color: #94a3b8;
+        }
+
+        .case-studies {
+            margin-bottom: 80px;
+        }
+
+        .case-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .case-card {
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(124, 58, 237, 0.2);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .case-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(139, 92, 246, 0.5);
+        }
+
+        .case-header {
+            padding: 20px;
+            background: rgba(109, 40, 217, 0.1);
+        }
+
+        .case-title {
+            font-size: 22px;
+            margin-bottom: 10px;
+            color: var(--accent);
+        }
+
+        .case-meta {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 14px;
+            color: #94a3b8;
+        }
+
+        .case-content {
+            padding: 20px;
+            line-height: 1.6;
+            color: #cbd5e1;
+        }
+
+        .case-quote {
+            margin: 20px 0;
+            padding: 15px;
+            background: rgba(139, 92, 246, 0.1);
+            border-radius: 10px;
+            font-style: italic;
+            color: var(--accent);
+        }
+
+        .tools-section {
+            margin-bottom: 80px;
+        }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .tool-card {
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(124, 58, 237, 0.2);
+            border-radius: 20px;
+            padding: 25px;
+            transition: all 0.3s ease;
+        }
+
+        .tool-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(139, 92, 246, 0.5);
+        }
+
+        .tool-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: rgba(139, 92, 246, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: var(--accent);
+            margin-bottom: 20px;
+        }
+
+        .tool-title {
+            font-size: 20px;
+            margin-bottom: 10px;
+            color: var(--accent);
+        }
+
+        .tool-description {
+            font-size: 15px;
+            color: #cbd5e1;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .tool-button {
+            display: block;
+            width: 100%;
+            padding: 10px 15px;
+            background: rgba(139, 92, 246, 0.2);
+            color: var(--accent);
+            border-radius: 50px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .tool-button:hover {
+            background: rgba(139, 92, 246, 0.4);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .healing-journal {
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(124, 58, 237, 0.2);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 80px;
+        }
+
+        .journal-form {
+            display: grid;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-label {
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+
+        .form-input,
+        .form-textarea {
+            padding: 15px;
+            background: rgba(15, 23, 42, 0.4);
+            border: 1px solid rgba(124, 58, 237, 0.2);
+            border-radius: 10px;
+            color: var(--light);
+            font-size: 16px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus,
+        .form-textarea:focus {
+            border-color: rgba(139, 92, 246, 0.5);
+        }
+
+        .form-textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        .emotion-selector {
+            display: flex;
+            gap: 20px;
+            margin: 10px 0;
+        }
+
+        .emotion {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .emotion:hover {
+            transform: scale(1.1);
+        }
+
+        .emotion.active {
+            border-color: var(--accent);
+        }
+
+        .submit-button {
+            padding: 12px 30px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            font-size: 16px;
+        }
+
+        .submit-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(109, 40, 217, 0.3);
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px 0;
+            color: #94a3b8;
+            border-top: 1px solid rgba(124, 58, 237, 0.1);
+            margin-top: 60px;
+        }
+
+        @media (max-width: 900px) {
+            nav ul {
+                gap: 15px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .section-title {
+                font-size: 32px;
+            }
+
+            .logo {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 动态星星背景 -->
+    <div class="stars" id="stars"></div>
+
+    <div class="container">
+        <!-- 导航栏 -->
+        <header>
+            <a href="梦境广场.html" class="logo">
+                <i class="fas fa-cloud-moon"></i>
+                梦境广场
+            </a>
+            <nav>
+                <ul>
+                    <li><a href="梦境广场.html">首页</a></li>
+                    <li><a href="梦境日记.html">梦境日记</a></li>
+                    <li><a href="夜梦奇遇.html">夜梦奇遇</a></li>
+                    <li><a href="梦旅指南.html">梦旅指南</a></li>
+                    <li><a href="奇幻碎片.html">奇幻碎片</a></li>
+                    <li><a href="同频共振.html">同频共振</a></li>
+                    <li><a href="关于我们.html">关于我们</a></li>
+                    
+                </ul>
+            </nav>
+        </header>
+
+        <!-- 英雄区域 -->
+        <section class="healing-hero">
+            <h1 class="hero-title">梦境疗愈</h1>
+            <p class="hero-description">
+                利用梦境进行情绪疏导、创伤疗愈和自我成长，通过梦境工作解决现实生活中的挑战。
+            </p>
+        </section>
+
+        <!-- 疗愈方法 -->
+        <section class="healing-methods">
+            <h2 class="section-title">疗愈方法</h2>
+            <div class="method-grid">
+                <div class="method-card">
+                    <div class="method-icon">
+                        <i class="fas fa-comments"></i>
+                    </div>
+                    <h3 class="method-title">与梦中人物对话</h3>
+                    <div class="method-content">
+                        <p>在清醒梦中与梦中人物进行有意识的对话，获取潜意识层面的洞察和指导。</p>
+                        <ul class="method-steps">
+                            <li>在梦境中识别重要的人物角色</li>
+                            <li>主动发起对话并记录回应</li>
+                            <li>分析对话内容寻找象征意义</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="method-card">
+                    <div class="method-icon">
+                        <i class="fas fa-exchange-alt"></i>
+                    </div>
+                    <h3 class="method-title">噩梦转化</h3>
+                    <div class="method-content">
+                        <p>通过重新演绎噩梦场景，将恐惧转化为力量，缓解焦虑和创伤记忆。</p>
+                        <ul class="method-steps">
+                            <li>记录噩梦细节和情绪反应</li>
+                            <li>构思新的积极结局并反复想象</li>
+                            <li>在后续梦境中有意识地改变剧情</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="method-card">
+                    <div class="method-icon">
+                        <i class="fas fa-lightbulb"></i>
+                    </div>
+                    <h3 class="method-title">寻找梦中启示</h3>
+                    <div class="method-content">
+                        <p>识别梦境中的符号和隐喻，寻找解决现实问题的创造性灵感和指引。</p>
+                        <ul class="method-steps">
+                            <li>记录梦境中的关键意象和场景</li>
+                            <li>联想现实生活中的挑战和问题</li>
+                            <li>寻找梦境可能提供的解决方案</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="method-card">
+                    <div class="method-icon">
+                        <i class="fas fa-paint-brush"></i>
+                    </div>
+                    <h3 class="method-title">梦境激发创造力</h3>
+                    <div class="method-content">
+                        <p>利用梦境中的非常规思维和意象，激发艺术、科学和生活中的创造力。</p>
+                        <ul class="method-steps">
+                            <li>睡前设定创造意图</li>
+                            <li>醒来立即记录梦境细节</li>
+                            <li>将梦境元素融入创作过程</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 案例研究 -->
+        <section class="case-studies">
+            <h2 class="section-title">疗愈案例</h2>
+            <div class="case-grid">
+                <div class="case-card">
+                    <div class="case-header">
+                        <h3 class="case-title">从恐惧到平静：噩梦转化的力量</h3>
+                        <div class="case-meta">
+                            <div>作者：李明</div>
+                            <div>2025年3月</div>
+                        </div>
+                    </div>
+                    <div class="case-content">
+                        <p>李明长期受被追逐的噩梦困扰，每次醒来都感到焦虑和疲惫。通过梦境疗愈方法，他学会了在梦中面对追逐者，并最终发现追逐者实际上是他内心恐惧的象征。</p>
+                        <div class="case-quote">
+                            "当我在梦中转身面对那个一直追逐我的黑影时，它突然变成了一个需要帮助的孩子。这个转变彻底改变了我对恐惧的理解。"
+                        </div>
+                        <p>经过多次练习，李明不仅摆脱了噩梦的困扰，还在现实生活中获得了面对困难的勇气。他的焦虑水平显著下降，睡眠质量大幅提升。</p>
+                    </div>
+                </div>
+
+                <div class="case-card">
+                    <div class="case-header">
+                        <h3 class="case-title">梦中导师：职业转型的启示</h3>
+                        <div class="case-meta">
+                            <div>作者：王华</div>
+                            <div>2025年5月</div>
+                        </div>
+                    </div>
+                    <div class="case-content">
+                        <p>王华在一份不满意的工作中挣扎了多年，一直无法决定是否应该转型。在一次梦境中，她遇到了一位智慧的老者，这位老者引导她看到了自己潜在的才能和热情所在。</p>
+                        <div class="case-quote">
+                            "那位老者递给我一把钥匙，告诉我这是开启我真正使命的钥匙。当我醒来时，我突然明白了自己应该追求的方向。"
+                        </div>
+                        <p>王华根据梦境中的启示，开始学习新技能并最终成功转型到一个更有成就感的领域。她将这次梦境视为人生的转折点。</p>
+                    </div>
+                </div>
+
+                <div class="case-card">
+                    <div class="case-header">
+                        <h3 class="case-title">创伤疗愈：通过梦境重建安全感</h3>
+                        <div class="case-meta">
+                            <div>作者：张雪</div>
+                            <div>2025年6月</div>
+                        </div>
+                    </div>
+                    <div class="case-content">
+                        <p>张雪经历了一次严重的交通事故后，一直遭受创伤后应激障碍的困扰。通过系统的梦境疗愈，她学会了在梦中重新构建安全的环境，并逐渐释放了积压的情绪。</p>
+                        <div class="case-quote">
+                            "我开始在梦中建造一座安全的房子，每次感到恐惧时就回到那里。随着时间的推移，这座房子变得越来越坚固，我的安全感也随之增强。"
+                        </div>
+                        <p>经过几个月的练习，张雪的创伤症状明显减轻，她能够更好地应对日常生活中的触发因素，并逐渐恢复了正常的生活。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 疗愈工具 -->
+        <section class="tools-section">
+            <h2 class="section-title">疗愈工具</h2>
+            <div class="tools-grid">
+                <div class="tool-card">
+                    <div class="tool-icon">
+                        <i class="fas fa-book"></i>
+                    </div>
+                    <h3 class="tool-title">梦境日志</h3>
+                    <p class="tool-description">
+                        记录梦境细节，帮助识别模式和主题，是梦境工作的基础工具。
+                    </p>
+                    <a href="#" class="tool-button">
+                        <i class="fas fa-edit"></i> 开始记录
+                    </a>
+                </div>
+
+                <div class="tool-card">
+                    <div class="tool-icon">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <h3 class="tool-title">符号词典</h3>
+                    <p class="tool-description">
+                        探索常见梦境符号的心理学和文化象征意义。
+                    </p>
+                    <a href="#" class="tool-button">
+                        <i class="fas fa-book"></i> 查看词典
+                    </a>
+                </div>
+
+                <div class="tool-card">
+                    <div class="tool-icon">
+                        <i class="fas fa-moon"></i>
+                    </div>
+                    <h3 class="tool-title">睡前引导</h3>
+                    <p class="tool-description">
+                        冥想和可视化练习，帮助设定梦境意图，提高梦境回忆。
+                    </p>
+                    <a href="#" class="tool-button">
+                        <i class="fas fa-headphones"></i> 播放引导
+                    </a>
+                </div>
+
+                <div class="tool-card">
+                    <div class="tool-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3 class="tool-title">疗愈社群</h3>
+                    <p class="tool-description">
+                        加入支持小组，分享经验，获得专业指导和同伴支持。
+                    </p>
+                    <a href="#" class="tool-button">
+                        <i class="fas fa-plus"></i> 加入社群
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- 疗愈日志 -->
+        <section class="healing-journal">
+            <h2 class="section-title">开始你的疗愈之旅</h2>
+            <form class="journal-form">
+                <div class="form-group">
+                    <label class="form-label" for="dream-title">梦境标题</label>
+                    <input type="text" class="form-input" id="dream-title" placeholder="描述你的梦境标题">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="dream-content">梦境内容</label>
+                    <textarea class="form-textarea" id="dream-content" placeholder="详细描述你的梦境体验..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">情绪状态</label>
+                    <div class="emotion-selector">
+                        <div class="emotion active" style="background: rgba(220, 38, 38, 0.2);">
+                            <i class="fas fa-sad-tear" style="color: #dc2626;"></i>
+                        </div>
+                        <div class="emotion" style="background: rgba(245, 158, 11, 0.2);">
+                            <i class="fas fa-frown" style="color: #f59e0b;"></i>
+                        </div>
+                        <div class="emotion" style="background: rgba(16, 185, 129, 0.2);">
+                            <i class="fas fa-meh" style="color: #10b981;"></i>
+                        </div>
+                        <div class="emotion" style="background: rgba(59, 130, 246, 0.2);">
+                            <i class="fas fa-smile" style="color: #3b82f6;"></i>
+                        </div>
+                        <div class="emotion" style="background: rgba(139, 92, 246, 0.2);">
+                            <i class="fas fa-grin" style="color: #8b5cf6;"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="dream-insight">你的洞察</label>
+                    <textarea class="form-textarea" id="dream-insight" placeholder="你从这个梦境中获得了什么洞察或启示？"></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="action-plan">行动计划</label>
+                    <textarea class="form-textarea" id="action-plan" placeholder="基于这个梦境，你计划在现实生活中做出什么改变？"></textarea>
+                </div>
+                <button type="submit" class="submit-button">
+                    <i class="fas fa-save"></i> 保存日志
+                </button>
+            </form>
+        </section>
+    </div>
+
+    <!-- 页脚 -->
+    <footer>
+        <div class="container">
+            <p>© 2025 梦境广场 | 你的潜意识栖息地 ✨</p>
+            <p>在清醒世界的边缘，我们守护每一段奇幻旅程</p>
+        </div>
+    </footer>
+
+    <script>
+        // 创建星空效果
+        document.addEventListener('DOMContentLoaded', function () {
+            const starsContainer = document.getElementById('stars');
+            const starsCount = 150;
+
+            for (let i = 0; i < starsCount; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star');
+
+                // 随机位置
+                star.style.left = `${Math.random() * 100}vw`;
+                star.style.top = `${Math.random() * 100}vh`;
+
+                // 随机大小
+                const size = Math.random() * 3;
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+
+                // 随机动画参数
+                star.style.setProperty('--duration', `${Math.random() * 8 + 2}s`);
+                star.style.setProperty('--delay', `${Math.random() * 5}s`);
+
+                starsContainer.appendChild(star);
+            }
+
+            // 情绪选择器
+            const emotions = document.querySelectorAll('.emotion');
+            emotions.forEach(emotion => {
+                emotion.addEventListener('click', function () {
+                    // 移除所有active类
+                    emotions.forEach(e => e.classList.remove('active'));
+                    // 为当前点击的元素添加active类
+                    this.classList.add('active');
+                });
+            });
+
+            // 表单提交功能
+            const journalForm = document.querySelector('.journal-form');
+            if (journalForm) {
+                journalForm.addEventListener('submit', function (e) {
+                    e.preventDefault();
+                    alert('梦境日志已保存！我们建议您定期回顾这些记录，以发现潜在的模式和变化。');
+                    // 实际项目中这里应该有AJAX请求发送表单数据
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>

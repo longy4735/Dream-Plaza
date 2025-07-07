@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>清醒梦技巧 | 梦境广场</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* 保持与其他页面相同的样式基础 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #6d28d9;
+            --secondary: #8b5cf6;
+            --dark: #0f172a;
+            --light: #f8fafc;
+            --accent: #c4b5fd;
+            --text: #1e293b;
+            --premium: #f59e0b;
+        }
+
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            color: var(--light);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+            padding-bottom: 60px;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                radial-gradient(circle at 15% 20%, rgba(139, 92, 246, 0.1), transparent 25%),
+                radial-gradient(circle at 85% 30%, rgba(199, 210, 254, 0.1), transparent 25%),
+                radial-gradient(circle at 50% 70%, rgba(124, 58, 237, 0.1), transparent 30%);
+            z-index: -1;
+        }
+
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background-color: white;
+            border-radius: 50%;
+            animation: twinkle var(--duration, 4s) infinite var(--delay, 0s);
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; }
+            50% { opacity: 1; }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            padding: 20px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--light);
+            text-decoration: none;
+            font-family: 'Ma Shan Zheng', cursive;
+        }
+
+        .logo i {
+            color: var(--accent);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+
+        nav a {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 18px;
+            transition: all 0.3s ease;
+            position: relative;
+            padding-bottom: 5px;
+        }
+
+        nav a:hover {
+            color: white;
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            transition: width 0.3s ease;
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        .premium-badge {
+            background: var(--premium);
+            color: var(--dark);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-left: 8px;
+        }
+
+        .lucid-dream-hero {
+            padding: 80px 0;
+            text-align: center;
+        }
+
+        .hero-title {
+            font-size: 50px;
+            margin-bottom: 30px;
+            font-family: 'Ma Shan Zheng', cursive;
+        }
+
+        .hero-description {
+            font-size: 20px;
+            max-width: 800px;
+            margin: 0 auto 40px;
+            color: #cbd5e1;
+        }
+
+        .lucid-techniques {
+            margin-bottom: 80px;
+        }
+
+        .section-title {
+            font-size: 36px;
+            margin-bottom: 40px;
+            font-family: 'Ma Shan Zheng', cursive;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 80px;
+            height: 3px;
+            background: var(--accent);
+        }
+
+        .technique-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .technique-card {
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(124, 58, 237, 0.2);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .technique-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(139, 92, 246, 0.5);
+        }
+
+        .technique-header {
+            padding: 25px;
+            background: rgba(109, 40, 217, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .technique-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: rgba(139, 92, 246, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: var(--accent);
+        }
+
+        .technique-title {
+            font-size: 24px;
+            color: var(--accent);
+        }
+
+        .technique-content {
+            padding: 25px;
+            line-height: 1.6;
+            color: #cbd5e1;
+        }
+
+        .technique-steps {
+            margin-top: 20px;
+            padding-left: 20px;
+        }
+
+        .technique-steps li {
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .technique-steps li::before {
+            content: '•';
+            color: var(--accent);
+            position: absolute;
+            left: -20px;
+            font-size: 20px;
+        }
+
+        .premium-techniques {
+            margin-bottom: 80px;
+        }
+
+        .premium-technique-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .premium-technique-card {
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(124, 58, 237, 0.2);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .premium-technique-card::before {
+            content: '高级技巧';
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: var(--premium);
+            color: var(--dark);
+            padding: 5px 15px;
+            border-radius: 0 0 0 10px;
+            font-weight: bold;
+        }
+
+        .premium-technique-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(139, 92, 246, 0.5);
+        }
+
+        .premium-technique-header {
+            padding: 25px;
+            background: rgba(109, 40, 217, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .premium-technique-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: rgba(139, 92, 246, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: var(--accent);
+        }
+
+        .premium-technique-title {
+            font-size: 24px;
+            color: var(--accent);
+        }
+
+        .premium-technique-content {
+            padding: 25px;
+            line-height: 1.6;
+            color: #cbd5e1;
+        }
+
+        .premium-technique-steps {
+            margin-top: 20px;
+            padding-left: 20px;
+        }
+
+        .premium-technique-steps li {
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .premium-technique-steps li::before {
+            content: '•';
+            color: var(--premium);
+            position: absolute;
+            left: -20px;
+            font-size: 20px;
+        }
+
+        .lucid-tools {
+            margin-bottom: 80px;
+        }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .tool-card {
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(124, 58, 237, 0.2);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .tool-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(139, 92, 246, 0.5);
+        }
+
+        .tool-header {
+            padding: 20px;
+            background: rgba(109, 40, 217, 0.1);
+        }
+
+        .tool-title {
+            font-size: 22px;
+            margin-bottom: 10px;
+            color: var(--accent);
+        }
+
+        .tool-content {
+            padding: 20px;
+            line-height: 1.6;
+            color: #cbd5e1;
+        }
+
+        .lucid-journal {
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(124, 58, 237, 0.2);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 80px;
+        }
+
+        .journal-form {
+            display: grid;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-label {
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+
+        .form-input,
+        .form-textarea {
+            padding: 15px;
+            background: rgba(15, 23, 42, 0.4);
+            border: 1px solid rgba(124, 58, 237, 0.2);
+            border-radius: 10px;
+            color: var(--light);
+            font-size: 16px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus,
+        .form-textarea:focus {
+            border-color: rgba(139, 92, 246, 0.5);
+        }
+
+        .form-textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        .dream-elements {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 10px 0;
+        }
+
+        .element-tag {
+            background: rgba(139, 92, 246, 0.2);
+            color: var(--accent);
+            padding: 8px 15px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .element-tag:hover {
+            background: rgba(139, 92, 246, 0.3);
+        }
+
+        .element-tag i {
+            font-size: 12px;
+        }
+
+        .premium-button {
+            padding: 12px 30px;
+            background: linear-gradient(135deg, var(--premium), #d97706);
+            color: var(--dark);
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            font-size: 16px;
+            font-weight: bold;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .premium-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(245, 158, 11, 0.3);
+        }
+
+        .premium-button i {
+            margin-right: 8px;
+        }
+
+        .price-badge {
+            background: var(--dark);
+            color: var(--premium);
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 14px;
+            margin-left: 10px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px 0;
+            color: #94a3b8;
+            border-top: 1px solid rgba(124, 58, 237, 0.1);
+            margin-top: 60px;
+        }
+
+        @media (max-width: 900px) {
+            nav ul {
+                gap: 15px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .section-title {
+                font-size: 32px;
+            }
+
+            .logo {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 动态星星背景 -->
+    <div class="stars" id="stars"></div>
+
+    <div class="container">
+        <!-- 导航栏 -->
+        <header>
+            <a href="梦境广场.html" class="logo">
+                <i class="fas fa-cloud-moon"></i>
+                梦境广场
+            </a>
+            <nav>
+                <ul>
+                    <li><a href="梦境广场.html">首页</a></li>
+                    <li><a href="梦境探索与奇遇.html">梦境探索</a></li>
+                    <li><a href="夜梦奇遇.html">夜梦奇遇</a></li>
+                    <li><a href="梦境社区.html">梦境社区</a></li>
+                    <li><a href="奇幻碎片.html">奇幻碎片</a></li>
+                    <li><a href="梦旅指南.html">梦旅指南</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <!-- 英雄区域 -->
+        <section class="lucid-dream-hero">
+            <h1 class="hero-title">清醒梦技巧</h1>
+            <p class="hero-description">
+                掌握清醒梦的诱导方法，在梦中保持觉知，控制梦境情节，实现创造性探索和心理成长。
+            </p>
+        </section>
+
+        <!-- 基础技巧 -->
+        <section class="lucid-techniques">
+            <h2 class="section-title">基础清醒梦技巧</h2>
+            <div class="technique-grid">
+                <div class="technique-card">
+                    <div class="technique-header">
+                        <div class="technique-icon">
+                            <i class="fas fa-eye"></i>
+                        </div>
+                        <h3 class="technique-title">现实检查</h3>
+                    </div>
+                    <div class="technique-content">
+                        <p>现实检查是清醒梦的基础技巧，通过在日常生活中养成质疑现实的习惯，使这种质疑行为在梦中也能出现，从而意识到自己在做梦。</p>
+                        <ul class="technique-steps">
+                            <li>设置定时提醒，每小时进行一次现实检查</li>
+                            <li>常用的现实检查方法：看时钟、阅读文字、检查双手、尝试穿墙等</li>
+                            <li>每次检查时问自己："这是现实还是梦境？"</li>
+                            <li>坚持至少两周，形成习惯</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="technique-card">
+                    <div class="technique-header">
+                        <div class="technique-icon">
+                            <i class="fas fa-book"></i>
+                        </div>
+                        <h3 class="technique-title">梦境回顾</h3>
+                    </div>
+                    <div class="technique-content">
+                        <p>提高对梦境的敏感度和记忆力是清醒梦的关键。梦境回顾能帮助你识别梦境模式，增加在梦中意识到自己在做梦的概率。</p>
+                        <ul class="technique-steps">
+                            <li>醒来后立即记录梦境细节，使用梦境日记或录音</li>
+                            <li>记录越多细节越好，包括场景、人物、情绪、动作等</li>
+                            <li>定期回顾梦境日记，寻找重复出现的主题、人物或场景</li>
+                            <li>关注梦中的异常现象，这些往往是意识到自己在做梦的线索</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="technique-card">
+                    <div class="technique-header">
+                        <div class="technique-icon">
+                            <i class="fas fa-moon"></i>
+                        </div>
+                        <h3 class="technique-title">WILD技术</h3>
+                    </div>
+                    <div class="technique-content">
+                        <p>WILD（清醒梦直接进入法）是指从清醒状态直接进入梦境状态，同时保持意识清醒。这是一种高级技巧，需要一定的练习和耐心。</p>
+                        <ul class="technique-steps">
+                            <li>在睡眠中途醒来（例如睡4-6小时后）</li>
+                            <li>保持身体完全放松，但意识清醒</li>
+                            <li>专注于闭眼后看到的光影图案（hypnagogic imagery）</li>
+                            <li>随着这些图案开始形成场景，轻柔地进入其中，保持意识清醒</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="technique-card">
+                    <div class="technique-header">
+                        <div class="technique-icon">
+                            <i class="fas fa-lightbulb"></i>
+                        </div>
+                        <h3 class="technique-title">MILD技术</h3>
+                    </div>
+                    <div class="technique-content">
+                        <p>MILD（清醒梦记忆诱导法）是由Stephen LaBerge博士开发的技术，通过在入睡前设定意图，增加在梦中意识到自己在做梦的概率。</p>
+                        <ul class="technique-steps">
+                            <li>在入睡过程中，反复默念："下次做梦时，我要记得我在做梦"</li>
+                            <li>想象自己在梦中意识到自己在做梦的情景</li>
+                            <li>结合视觉化和情感，增强意图的力量</li>
+                            <li>如果中途醒来，重复上述过程</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 高级技巧 -->
+        <section class="premium-techniques">
+            <h2 class="section-title">高级清醒梦技巧 <span class="premium-badge">会员专属</span></h2>
+            <div class="premium-technique-grid">
+                <div class="premium-technique-card">
+                    <div class="premium-technique-header">
+                        <div class="premium-technique-icon">
+                            <i class="fas fa-brain"></i>
+                        </div>
+                        <h3 class="premium-technique-title">感官增强法</h3>
+                    </div>
+                    <div class="premium-technique-content">
+                        <p>在清醒梦中增强感官体验可以延长梦境并增加真实感，使你能够更充分地探索梦境世界。</p>
+                        <ul class="premium-technique-steps">
+                            <li>在梦中触摸周围物体，感受质地和温度</li>
+                            <li>深呼吸，感受空气进入肺部的感觉</li>
+                            <li>观察梦境中的细节，如纹理、颜色和光线</li>
+                            <li>与梦境中的人物互动，倾听他们的声音</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="premium-technique-card">
+                    <div class="premium-technique-header">
+                        <div class="premium-technique-icon">
+                            <i class="fas fa-bolt"></i>
+                        </div>
+                        <h3 class="premium-technique-title">梦境稳定法</h3>
+                    </div>
+                    <div class="premium-technique-content">
+                        <p>许多初学者在意识到自己在做梦后很快就会醒来。梦境稳定技术可以帮助你保持在清醒梦中的时间。</p>
+                        <ul class="premium-technique-steps">
+                            <li>用手摩擦或触摸周围物体，集中注意力</li>
+                            <li>大声说："梦境稳定！"或"保持清醒！"</li>
+                            <li>缓慢深呼吸，保持冷静和放松</li>
+                            <li>避免剧烈动作或情绪波动</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="premium-technique-card">
+                    <div class="premium-technique-header">
+                        <div class="premium-technique-icon">
+                            <i class="fas fa-magic"></i>
+                        </div>
+                        <h3 class="premium-technique-title">梦境控制法</h3>
+                    </div>
+                    <div class="premium-technique-content">
+                        <p>一旦在清醒梦中稳定下来，你可以开始学习控制梦境的内容，实现各种奇幻体验。</p>
+                        <ul class="premium-technique-steps">
+                            <li>从简单的改变开始，如改变天气或场景</li>
+                            <li>想象你想要的东西出现在面前</li>
+                            <li>使用意志力飞行或执行其他超能力</li>
+                            <li>如果遇到困难，提醒自己这是你的梦境，你有完全的控制权</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 清醒梦工具 -->
+        <section class="lucid-tools">
+            <h2 class="section-title">清醒梦辅助工具</h2>
+            <div class="tools-grid">
+                <div class="tool-card">
+                    <div class="tool-header">
+                        <h3 class="tool-title">梦境日记应用</h3>
+                    </div>
+                    <div class="tool-content">
+                        <p>使用专门的梦境日记应用记录和分析你的梦境。这些应用通常提供标签分类、搜索功能和梦境统计，帮助你识别梦境模式和提高梦境回忆能力。</p>
+                        <p>推荐应用：DreamView、Lucidity、Pillow等。</p>
+                    </div>
+                </div>
+
+                <div class="tool-card">
+                    <div class="tool-header">
+                        <h3 class="tool-title">现实检查提醒</h3>
+                    </div>
+                    <div class="tool-content">
+                        <p>设置手机闹钟或使用专门的现实检查应用，定时提醒你进行现实检查。这有助于在日常生活中养成质疑现实的习惯，从而在梦中也能自然地进行现实检查。</p>
+                        <p>推荐应用：Lucid Dreamer、Realty Check等。</p>
+                    </div>
+                </div>
+
+                <div class="tool-card">
+                    <div class="tool-header">
+                        <h3 class="tool-title">清醒梦眼罩</h3>
+                    </div>
+                    <div class="tool-content">
+                        <p>清醒梦眼罩是一种特殊的睡眠眼罩，它能检测REM睡眠阶段，并通过闪烁的灯光或声音提示你进入清醒梦状态。这是一种物理辅助工具，可提高清醒梦的发生率。</p>
+                        <p>推荐产品：Dormio、Remee、NovaDreamer等。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 清醒梦日志 -->
+        <section class="lucid-journal">
+            <h2 class="section-title">记录你的清醒梦体验 <span class="premium-badge">会员专属</span></h2>
+            <form class="journal-form">
+                <div class="form-group">
+                    <label class="form-label" for="lucid-title">清醒梦标题</label>
+                    <input type="text" class="form-input" id="lucid-title" placeholder="为你的清醒梦起一个标题">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="lucid-content">梦境描述</label>
+                    <textarea class="form-textarea" id="lucid-content" placeholder="详细描述你的清醒梦内容..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">你使用的技巧</label>
+                    <div class="dream-elements">
+                        <div class="element-tag">
+                            现实检查 <i class="fas fa-times-circle"></i>
+                        </div>
+                        <div class="element-tag">
+                            MILD <i class="fas fa-times-circle"></i>
+                        </div>
+                        <div class="element-tag">
+                            <i class="fas fa-plus-circle"></i> 添加技巧
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="lucid-control">梦境控制程度</label>
+                    <select class="form-input" id="lucid-control">
+                        <option value="低">低：仅意识到自己在做梦</option>
+                        <option value="中">中：能够控制简单动作</option>
+                        <option value="高">高：能够完全控制梦境</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="lucid-insight">梦境洞察</label>
+                    <textarea class="form-textarea" id="lucid-insight" placeholder="你从这个清醒梦中获得了什么洞察或启示？"></textarea>
+                </div>
+                <button type="submit" class="premium-button">
+                    <i class="fas fa-save"></i> 保存日志
+                    <span class="price-badge">会员特权</span>
+                </button>
+            </form>
+        </section>
+    </div>
+
+    <!-- 页脚 -->
+    <footer>
+        <div class="container">
+            <p>© 2023 梦境广场 | 你的潜意识栖息地 ✨</p>
+            <p>在清醒世界的边缘，我们守护每一段奇幻旅程</p>
+        </div>
+    </footer>
+
+    <script>
+        // 创建星空效果
+        document.addEventListener('DOMContentLoaded', function () {
+            const starsContainer = document.getElementById('stars');
+            const starsCount = 150;
+
+            for (let i = 0; i < starsCount; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star');
+
+                // 随机位置
+                star.style.left = `${Math.random() * 100}vw`;
+                star.style.top = `${Math.random() * 100}vh`;
+
+                // 随机大小
+                const size = Math.random() * 3;
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+
+                // 随机动画参数
+                star.style.setProperty('--duration', `${Math.random() * 8 + 2}s`);
+                star.style.setProperty('--delay', `${Math.random() * 5}s`);
+
+                starsContainer.appendChild(star);
+            }
+
+            // 移除元素标签
+            const removeTags = document.querySelectorAll('.element-tag i.fas.fa-times-circle');
+            removeTags.forEach(tag => {
+                tag.addEventListener('click', function (e) {
+                    this.parentElement.remove();
+                });
+            });
+
+            // 添加元素标签
+            const addTags = document.querySelectorAll('.element-tag i.fas.fa-plus-circle');
+            addTags.forEach(tag => {
+                tag.addEventListener('click', function (e) {
+                    const parentTag = this.parentElement;
+                    const elementType = parentTag.parentElement.previousElementSibling.textContent.trim();
+                    
+                    // 创建输入框
+                    const input = document.createElement('input');
+                    input.type = 'text';
+                    input.placeholder = `添加${elementType}`;
+                    input.classList.add('form-input');
+                    input.style.marginBottom = '10px';
+                    
+                    // 替换加号标签
+                    parentTag.parentElement.appendChild(input);
+                    parentTag.remove();
+                    
+                    // 添加事件监听
+                    input.addEventListener('keydown', function (e) {
+                        if (e.key === 'Enter' && this.value.trim() !== '') {
+                            const newTag = document.createElement('div');
+                            newTag.className = 'element-tag';
+                            newTag.innerHTML = `
+                                ${this.value.trim()} <i class="fas fa-times-circle"></i>
+                            `;
+                            
+                            // 添加到标签容器
+                            this.parentElement.insertBefore(newTag, this);
+                            
+                            // 为新标签添加删除事件
+                            newTag.querySelector('i.fas.fa-times-circle').addEventListener('click', function (e) {
+                                this.parentElement.remove();
+                            });
+                            
+                            // 移除输入框
+                            this.parentElement.removeChild(this);
+                            
+                            // 重新添加加号标签
+                            const addTagContainer = document.createElement('div');
+                            addTagContainer.className = 'element-tag';
+                            addTagContainer.innerHTML = `
+                                <i class="fas fa-plus-circle"></i> 添加${elementType}
+                            `;
+                            
+                            this.parentElement.appendChild(addTagContainer);
+                            
+                            // 为新加号标签添加事件
+                            addTagContainer.querySelector('i.fas.fa-plus-circle').addEventListener('click', function (e) {
+                                // 递归调用
+                                this.parentElement.parentElement.querySelector('.element-tag:last-child').click();
+                            });
+                        }
+                    });
+                });
+            });
+
+            // 表单提交功能
+            const analysisForm = document.querySelector('.journal-form');
+            if (analysisForm) {
+                analysisForm.addEventListener('submit', function (e) {
+                    e.preventDefault();
+                    alert('请先升级为会员，即可保存你的清醒梦日志并解锁更多功能！');
+                    // 实际项目中这里应该有AJAX请求发送表单数据
+                });
+            }
+        });
+    </script>
+</body>
+</html>

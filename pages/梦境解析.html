@@ -1,0 +1,1171 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>梦境解析 | 梦境广场</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* 保持与其他页面相同的样式基础 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #6d28d9;
+            --secondary: #8b5cf6;
+            --dark: #0f172a;
+            --light: #f8fafc;
+            --accent: #c4b5fd;
+            --text: #1e293b;
+            --premium: #f59e0b;
+        }
+
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            color: var(--light);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+            padding-bottom: 60px;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                radial-gradient(circle at 15% 20%, rgba(139, 92, 246, 0.1), transparent 25%),
+                radial-gradient(circle at 85% 30%, rgba(199, 210, 254, 0.1), transparent 25%),
+                radial-gradient(circle at 50% 70%, rgba(124, 58, 237, 0.1), transparent 30%);
+            z-index: -1;
+        }
+
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background-color: white;
+            border-radius: 50%;
+            animation: twinkle var(--duration, 4s) infinite var(--delay, 0s);
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; }
+            50% { opacity: 1; }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            padding: 20px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--light);
+            text-decoration: none;
+            font-family: 'Ma Shan Zheng', cursive;
+        }
+
+        .logo i {
+            color: var(--accent);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+
+        nav a {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 18px;
+            transition: all 0.3s ease;
+            position: relative;
+            padding-bottom: 5px;
+        }
+
+        nav a:hover {
+            color: white;
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            transition: width 0.3s ease;
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        .premium-badge {
+            background: var(--premium);
+            color: var(--dark);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-left: 8px;
+        }
+
+        .dream-analysis-hero {
+            padding: 80px 0;
+            text-align: center;
+        }
+
+        .hero-title {
+            font-size: 50px;
+            margin-bottom: 30px;
+            font-family: 'Ma Shan Zheng', cursive;
+        }
+
+        .hero-description {
+            font-size: 20px;
+            max-width: 800px;
+            margin: 0 auto 40px;
+            color: #cbd5e1;
+        }
+
+        .dream-symbols {
+            margin-bottom: 80px;
+        }
+
+        .section-title {
+            font-size: 36px;
+            margin-bottom: 40px;
+            font-family: 'Ma Shan Zheng', cursive;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 80px;
+            height: 3px;
+            background: var(--accent);
+        }
+
+        .symbol-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .symbol-card {
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(124, 58, 237, 0.2);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .symbol-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(139, 92, 246, 0.5);
+        }
+
+        .symbol-header {
+            padding: 25px;
+            background: rgba(109, 40, 217, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .symbol-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: rgba(139, 92, 246, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: var(--accent);
+        }
+
+        .symbol-title {
+            font-size: 24px;
+            color: var(--accent);
+        }
+
+        .symbol-content {
+            padding: 25px;
+            line-height: 1.6;
+            color: #cbd5e1;
+        }
+
+        .symbol-details {
+            margin-top: 20px;
+        }
+
+        .symbol-point {
+            margin-bottom: 15px;
+        }
+
+        .symbol-point h4 {
+            color: var(--accent);
+            margin-bottom: 5px;
+        }
+
+        .dream-theories {
+            margin-bottom: 80px;
+        }
+
+        .theory-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .theory-card {
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(124, 58, 237, 0.2);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .theory-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(139, 92, 246, 0.5);
+        }
+
+        .theory-header {
+            padding: 20px;
+            background: rgba(109, 40, 217, 0.1);
+        }
+
+        .theory-title {
+            font-size: 22px;
+            margin-bottom: 10px;
+            color: var(--accent);
+        }
+
+        .theory-author {
+            font-size: 16px;
+            color: #94a3b8;
+        }
+
+        .theory-content {
+            padding: 20px;
+            line-height: 1.6;
+            color: #cbd5e1;
+        }
+
+        .analysis-methods {
+            margin-bottom: 80px;
+        }
+
+        .method-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .method-item {
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(124, 58, 237, 0.2);
+            border-radius: 20px;
+            padding: 30px;
+            transition: all 0.3s ease;
+        }
+
+        .method-item:hover {
+            transform: translateY(-5px);
+            border-color: rgba(139, 92, 246, 0.5);
+        }
+
+        .method-number {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(139, 92, 246, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: var(--accent);
+            margin-bottom: 20px;
+        }
+
+        .method-title {
+            font-size: 22px;
+            margin-bottom: 15px;
+            color: var(--accent);
+        }
+
+        .method-steps {
+            margin-top: 15px;
+            padding-left: 20px;
+        }
+
+        .method-steps li {
+            margin-bottom: 10px;
+            color: #94a3b8;
+        }
+
+        .dream-dictionary {
+            margin-bottom: 80px;
+        }
+
+        .dictionary-search {
+            margin-bottom: 30px;
+            display: flex;
+            gap: 15px;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 15px;
+            background: rgba(15, 23, 42, 0.4);
+            border: 1px solid rgba(124, 58, 237, 0.2);
+            border-radius: 10px;
+            color: var(--light);
+            font-size: 16px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            border-color: rgba(139, 92, 246, 0.5);
+        }
+
+        .search-button {
+            padding: 15px 30px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            font-size: 16px;
+        }
+
+        .search-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(109, 40, 217, 0.3);
+        }
+
+        .dictionary-results {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .dictionary-item {
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(124, 58, 237, 0.2);
+            border-radius: 15px;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .dictionary-item:hover {
+            transform: translateY(-3px);
+            border-color: rgba(139, 92, 246, 0.5);
+        }
+
+        .dictionary-term {
+            font-size: 20px;
+            color: var(--accent);
+            margin-bottom: 10px;
+        }
+
+        .dictionary-definition {
+            color: #cbd5e1;
+            line-height: 1.5;
+        }
+
+        .book-resources {
+            margin-bottom: 80px;
+        }
+
+        .book-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .book-card {
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(124, 58, 237, 0.2);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .book-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(139, 92, 246, 0.5);
+        }
+
+        .book-cover {
+            height: 250px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .book-cover img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .book-card:hover .book-cover img {
+            transform: scale(1.05);
+        }
+
+        .book-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--premium);
+            color: var(--dark);
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .book-content {
+            padding: 20px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .book-title {
+            font-size: 20px;
+            color: var(--accent);
+            margin-bottom: 10px;
+        }
+
+        .book-author {
+            font-size: 16px;
+            color: #94a3b8;
+            margin-bottom: 15px;
+        }
+
+        .book-description {
+            color: #cbd5e1;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            flex: 1;
+        }
+
+        .book-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .book-price {
+            color: var(--premium);
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .book-button {
+            padding: 10px 20px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .book-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(109, 40, 217, 0.3);
+        }
+
+        .dream-journal {
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(124, 58, 237, 0.2);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 80px;
+        }
+
+        .journal-form {
+            display: grid;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-label {
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+
+        .form-input,
+        .form-textarea {
+            padding: 15px;
+            background: rgba(15, 23, 42, 0.4);
+            border: 1px solid rgba(124, 58, 237, 0.2);
+            border-radius: 10px;
+            color: var(--light);
+            font-size: 16px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus,
+        .form-textarea:focus {
+            border-color: rgba(139, 92, 246, 0.5);
+        }
+
+        .form-textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        .dream-elements {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 10px 0;
+        }
+
+        .element-tag {
+            background: rgba(139, 92, 246, 0.2);
+            color: var(--accent);
+            padding: 8px 15px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .element-tag:hover {
+            background: rgba(139, 92, 246, 0.3);
+        }
+
+        .element-tag i {
+            font-size: 12px;
+        }
+
+        .premium-button {
+            padding: 12px 30px;
+            background: linear-gradient(135deg, var(--premium), #d97706);
+            color: var(--dark);
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            font-size: 16px;
+            font-weight: bold;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .premium-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(245, 158, 11, 0.3);
+        }
+
+        .premium-button i {
+            margin-right: 8px;
+        }
+
+        .price-badge {
+            background: var(--dark);
+            color: var(--premium);
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 14px;
+            margin-left: 10px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px 0;
+            color: #94a3b8;
+            border-top: 1px solid rgba(124, 58, 237, 0.1);
+            margin-top: 60px;
+        }
+
+        @media (max-width: 900px) {
+            nav ul {
+                gap: 15px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .section-title {
+                font-size: 32px;
+            }
+
+            .logo {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 动态星星背景 -->
+    <div class="stars" id="stars"></div>
+
+    <div class="container">
+        <!-- 导航栏 -->
+        <header>
+            <a href="梦境广场.html" class="logo">
+                <i class="fas fa-cloud-moon"></i>
+                梦境广场
+            </a>
+            <nav>
+                <ul>
+                    <li><a href="梦境广场.html">首页</a></li>
+                    <li><a href="梦境日记.html">梦境日记</a></li>
+                    <li><a href="夜梦奇遇.html">夜梦奇遇</a></li>
+                    <li><a href="梦境社区.html">梦境社区</a></li>
+                    <li><a href="奇幻碎片.html">奇幻碎片</a></li>
+                    <li><a href="梦旅指南.html">梦旅指南</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <!-- 英雄区域 -->
+        <section class="dream-analysis-hero">
+            <h1 class="hero-title">梦境解析</h1>
+            <p class="hero-description">
+                探索梦境背后的心理学意义，了解常见梦境符号的象征意义，掌握解析自己梦境的基本方法。
+            </p>
+        </section>
+
+        <!-- 常见梦境符号 -->
+        <section class="dream-symbols">
+            <h2 class="section-title">常见梦境符号</h2>
+            <div class="symbol-grid">
+                <div class="symbol-card">
+                    <div class="symbol-header">
+                        <div class="symbol-icon">
+                            <i class="fas fa-plane"></i>
+                        </div>
+                        <h3 class="symbol-title">飞行梦境</h3>
+                    </div>
+                    <div class="symbol-content">
+                        <p>飞行梦境是最常见的梦境类型之一，通常象征着自由、突破限制和超越现实的能力。</p>
+                        <div class="symbol-details">
+                            <div class="symbol-point">
+                                <h4>积极含义</h4>
+                                <p>代表内心渴望自由，或在现实生活中取得了重要突破，感受到了成就感。</p>
+                            </div>
+                            <div class="symbol-point">
+                                <h4>消极含义</h4>
+                                <p>如果飞行时感到恐惧或失控，可能表示对未知或变化的不安。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="symbol-card">
+                    <div class="symbol-header">
+                        <div class="symbol-icon">
+                            <i class="fas fa-falling"></i>
+                        </div>
+                        <h3 class="symbol-title">坠落梦境</h3>
+                    </div>
+                    <div class="symbol-content">
+                        <p>坠落梦境也是常见的梦境类型，通常与不安全感、失去控制或对某种情况的担忧有关。</p>
+                        <div class="symbol-details">
+                            <div class="symbol-point">
+                                <h4>心理解读</h4>
+                                <p>可能反映现实生活中感到压力、焦虑，或对某件事情感到无法掌控。</p>
+                            </div>
+                            <div class="symbol-point">
+                                <h4>应对建议</h4>
+                                <p>关注生活中让你感到不稳定的领域，尝试寻找支持和解决方案。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="symbol-card">
+                    <div class="symbol-header">
+                        <div class="symbol-icon">
+                            <i class="fas fa-running"></i>
+                        </div>
+                        <h3 class="symbol-title">被追逐梦境</h3>
+                    </div>
+                    <div class="symbol-content">
+                        <p>被追逐的梦境通常反映出逃避现实压力、冲突或某种不愿面对的情绪或问题。</p>
+                        <div class="symbol-details">
+                            <div class="symbol-point">
+                                <h4>常见象征</h4>
+                                <p>追逐者可能代表你试图逃避的人、情绪或情况。</p>
+                            </div>
+                            <div class="symbol-point">
+                                <h4>潜意识信息</h4>
+                                <p>梦境提示你需要勇敢面对问题，而不是继续逃避。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="symbol-card">
+                    <div class="symbol-header">
+                        <div class="symbol-icon">
+                            <i class="fas fa-pencil-alt"></i>
+                        </div>
+                        <h3 class="symbol-title">考试梦境</h3>
+                    </div>
+                    <div class="symbol-content">
+                        <p>考试梦境在学生和职场人士中较为常见，通常与焦虑、责任感和对表现的担忧有关。</p>
+                        <div class="symbol-details">
+                            <div class="symbol-point">
+                                <h4>常见场景</h4>
+                                <p>找不到考场、忘记带笔、不会答题等，反映对任务准备不足的焦虑。</p>
+                            </div>
+                            <div class="symbol-point">
+                                <h4>深层含义</h4>
+                                <p>可能暗示对生活中某种"考验"的担忧，或对自己要求过高。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 梦境解析理论 -->
+        <section class="dream-theories">
+            <h2 class="section-title">梦境解析理论</h2>
+            <div class="theory-grid">
+                <div class="theory-card">
+                    <div class="theory-header">
+                        <h3 class="theory-title">弗洛伊德理论</h3>
+                        <p class="theory-author">西格蒙德·弗洛伊德</p>
+                    </div>
+                    <div class="theory-content">
+                        <p>弗洛伊德认为梦境是"通往潜意识的皇家大道"，梦中的内容是被压抑的愿望和冲突的象征性表达。他区分了梦境的"显性内容"（梦境表面的情节）和"隐性内容"（隐藏的潜意识意义）。</p>
+                        <p>根据弗洛伊德的观点，梦境通过象征、移置和凝缩等机制来伪装潜意识中的欲望，特别是性和攻击冲动。</p>
+                    </div>
+                </div>
+
+                <div class="theory-card">
+                    <div class="theory-header">
+                        <h3 class="theory-title">荣格理论</h3>
+                        <p class="theory-author">卡尔·荣格</p>
+                    </div>
+                    <div class="theory-content">
+                        <p>荣格认为梦境是心灵自然的产物，它们不仅揭示了个人潜意识，还触及集体潜意识中的原型。他认为梦境的功能是补偿意识心理的片面性，帮助个体实现心理整合。</p>
+                        <p>荣格强调梦境中的符号具有普遍和个人双重意义，解析时需要结合梦者的个人经历和文化背景。</p>
+                    </div>
+                </div>
+
+                <div class="theory-card">
+                    <div class="theory-header">
+                        <h3 class="theory-title">激活-合成理论</h3>
+                        <p class="theory-author">艾伦·霍布森和罗伯特·麦卡利</p>
+                    </div>
+                    <div class="theory-content">
+                        <p>这一神经生物学理论认为，梦境是大脑在睡眠状态下的随机神经活动的结果。当脑干在REM睡眠期间产生随机电信号时，大脑试图将这些信号整合为连贯的故事，从而产生梦境。</p>
+                        <p>根据这一理论，梦境没有特定的意义，但大脑会为这些随机信号创造解释，赋予它们叙事结构。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 解析方法 -->
+        <section class="analysis-methods">
+            <h2 class="section-title">解析方法指南</h2>
+            <div class="method-list">
+                <div class="method-item">
+                    <div class="method-number">1</div>
+                    <h3 class="method-title">记录梦境</h3>
+                    <p>在醒来后立即记录梦境的细节是解析的基础。尽量写下所有能记住的内容：场景、人物、情绪、动作等。</p>
+                    <ul class="method-steps">
+                        <li>准备一本梦境日志放在床头</li>
+                        <li>醒来后保持身体不动，回忆梦境细节</li>
+                        <li>用关键词、短语或完整句子记录</li>
+                        <li>记录醒来时的情绪和身体感觉</li>
+                    </ul>
+                </div>
+
+                <div class="method-item">
+                    <div class="method-number">2</div>
+                    <h3 class="method-title">识别符号和主题</h3>
+                    <p>分析梦境中的关键符号、人物和反复出现的主题。注意那些特别生动、奇怪或情绪化的元素。</p>
+                    <ul class="method-steps">
+                        <li>列出梦境中的所有符号和人物</li>
+                        <li>思考每个元素对你个人的意义</li>
+                        <li>寻找重复出现的主题或模式</li>
+                        <li>注意梦境中的情绪基调</li>
+                    </ul>
+                </div>
+
+                <div class="method-item">
+                    <div class="method-number">3</div>
+                    <h3 class="method-title">关联现实生活</h3>
+                    <p>将梦境内容与现实生活中的事件、情绪和挑战联系起来。思考梦境可能反映的当前生活状况。</p>
+                    <ul class="method-steps">
+                        <li>思考近期生活中的压力或变化</li>
+                        <li>寻找梦境与现实的隐喻联系</li>
+                        <li>考虑梦境是否提供了解决问题的视角</li>
+                        <li>反思你当前的情绪状态和未解决的冲突</li>
+                    </ul>
+                </div>
+
+                <div class="method-item">
+                    <div class="method-number">4</div>
+                    <h3 class="method-title">探索潜意识信息</h3>
+                    <p>尝试理解梦境可能传达的潜意识信息。这可能需要放下理性分析，倾听直觉。</p>
+                    <ul class="method-steps">
+                        <li>问自己："这个梦境想告诉我什么？"</li>
+                        <li>考虑符号的象征意义而非字面意义</li>
+                        <li>思考梦境如何反映你的内心状态</li>
+                        <li>想象如果梦境是一个隐喻，它可能代表什么</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 梦境词典 -->
+        <section class="dream-dictionary">
+            <h2 class="section-title">梦境符号词典</h2>
+            <div class="dictionary-search">
+                <input type="text" class="search-input" placeholder="搜索梦境符号...">
+                <button class="search-button">
+                    <i class="fas fa-search"></i> 搜索
+                </button>
+            </div>
+            <div class="dictionary-results">
+                <div class="dictionary-item">
+                    <h3 class="dictionary-term">水</h3>
+                    <p class="dictionary-definition">水通常象征情绪、潜意识和生命力。平静的水可能代表内心平静，而波涛汹涌的水可能表示情绪动荡。</p>
+                </div>
+                <div class="dictionary-item">
+                    <h3 class="dictionary-term">房屋</h3>
+                    <p class="dictionary-definition">房屋常象征自我或生活状态。不同的房间可能代表不同的人格层面或生活领域。</p>
+                </div>
+                <div class="dictionary-item">
+                    <h3 class="dictionary-term">车辆</h3>
+                    <p class="dictionary-definition">车辆通常代表人生旅程或前进方向。驾驶失控可能表示感到生活失去控制。</p>
+                </div>
+                <div class="dictionary-item">
+                    <h3 class="dictionary-term">死亡</h3>
+                    <p class="dictionary-definition">死亡在梦中通常象征变化、结束或转变，而非字面意义上的死亡。</p>
+                </div>
+                <div class="dictionary-item">
+                    <h3 class="dictionary-term">牙齿脱落</h3>
+                                        <p class="dictionary-definition">常见的焦虑梦境，可能与自我形象、沟通困难或对衰老的担忧有关。</p>
+                </div>
+                <div class="dictionary-item">
+                    <h3 class="dictionary-term">飞翔</h3>
+                    <p class="dictionary-definition">象征自由、超越限制或对某种成就的渴望。飞行时的情绪（恐惧或喜悦）很重要。</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 书籍资源区 -->
+        <section class="book-resources">
+            <h2 class="section-title">梦境解析专业资源 <span class="premium-badge">付费</span></h2>
+            <div class="book-grid">
+                <div class="book-card">
+                    <div class="book-cover">
+                        <img src="https://picsum.photos/seed/dream1/400/600" alt="《梦的解析》书籍封面">
+                        <div class="book-badge">畅销</div>
+                    </div>
+                    <div class="book-content">
+                        <h3 class="book-title">《梦的解析》完整版</h3>
+                        <p class="book-author">西格蒙德·弗洛伊德</p>
+                        <p class="book-description">弗洛伊德的经典著作，系统阐述了精神分析学派的梦境理论，解析梦的象征意义和潜意识表达。</p>
+                        <div class="book-footer">
+                            <div class="book-price">¥68.00</div>
+                            <a href="#" class="book-button">立即购买</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="book-card">
+                    <div class="book-cover">
+                        <img src="https://picsum.photos/seed/dream2/400/600" alt="《潜意识的力量》书籍封面">
+                        <div class="book-badge">畅销</div>
+                    </div>
+                    <div class="book-content">
+                        <h3 class="book-title">《潜意识的力量》</h3>
+                        <p class="book-author">约瑟夫·墨菲</p>
+                        <p class="book-description">探索潜意识如何影响梦境，以及如何利用梦境开发潜能、解决生活问题的实用指南。</p>
+                        <div class="book-footer">
+                            <div class="book-price">¥59.00</div>
+                            <a href="#" class="book-button">立即购买</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="book-card">
+                    <div class="book-cover">
+                        <img src="https://picsum.photos/seed/dream3/400/600" alt="《梦境词典大全》书籍封面">
+                        <div class="book-badge">热门</div>
+                    </div>
+                    <div class="book-content">
+                        <h3 class="book-title">《梦境词典大全》</h3>
+                        <p class="book-author">多位专家合著</p>
+                        <p class="book-description">全面的梦境符号解析词典，包含超过1000种常见梦境元素的详细解读和文化象征。</p>
+                        <div class="book-footer">
+                            <div class="book-price">¥88.00</div>
+                            <a href="#" class="book-button">立即购买</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="book-card">
+                    <div class="book-cover">
+                        <img src="https://picsum.photos/seed/dream4/400/600" alt="《清醒梦的艺术》书籍封面">
+                        <div class="book-badge">新上架</div>
+                    </div>
+                    <div class="book-content">
+                        <h3 class="book-title">《清醒梦的艺术》</h3>
+                        <p class="book-author">斯蒂芬·拉贝奇</p>
+                        <p class="book-description">关于清醒梦的权威指南，教你如何在梦中保持清醒，掌控梦境内容并进行自我探索。</p>
+                        <div class="book-footer">
+                            <div class="book-price">¥72.00</div>
+                            <a href="#" class="book-button">立即购买</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 梦境解析工具 -->
+        <section class="dream-journal">
+            <h2 class="section-title">获取专业解析建议 <span class="premium-badge">付费</span></h2>
+            <form class="journal-form">
+                <div class="form-group">
+                    <label class="form-label" for="dream-title">梦境标题</label>
+                    <input type="text" class="form-input" id="dream-title" placeholder="为你的梦境起一个标题">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="dream-content">梦境描述</label>
+                    <textarea class="form-textarea" id="dream-content" placeholder="详细描述你的梦境内容..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">主要情绪</label>
+                    <div class="dream-elements">
+                        <div class="element-tag">
+                            恐惧 <i class="fas fa-times-circle"></i>
+                        </div>
+                        <div class="element-tag">
+                            喜悦 <i class="fas fa-times-circle"></i>
+                        </div>
+                        <div class="element-tag">
+                            焦虑 <i class="fas fa-times-circle"></i>
+                        </div>
+                        <div class="element-tag">
+                            <i class="fas fa-plus-circle"></i> 添加情绪
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">关键符号</label>
+                    <div class="dream-elements">
+                        <div class="element-tag">
+                            水 <i class="fas fa-times-circle"></i>
+                        </div>
+                        <div class="element-tag">
+                            房屋 <i class="fas fa-times-circle"></i>
+                        </div>
+                        <div class="element-tag">
+                            <i class="fas fa-plus-circle"></i> 添加符号
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="dream-insight">你的洞察</label>
+                    <textarea class="form-textarea" id="dream-insight" placeholder="你认为这个梦境可能意味着什么？"></textarea>
+                </div>
+                <button type="submit" class="premium-button">
+                    <i class="fas fa-magic"></i> 获取专业解析
+                    <span class="price-badge">¥29.90</span>
+                </button>
+            </form>
+        </section>
+    </div>
+
+    <!-- 页脚 -->
+    <footer>
+        <div class="container">
+            <p>© 2025 梦境广场 | 你的潜意识栖息地 ✨</p>
+            <p>在清醒世界的边缘，我们守护每一段奇幻旅程</p>
+        </div>
+    </footer>
+
+    <script>
+        // 创建星空效果
+        document.addEventListener('DOMContentLoaded', function () {
+            const starsContainer = document.getElementById('stars');
+            const starsCount = 150;
+
+            for (let i = 0; i < starsCount; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star');
+
+                // 随机位置
+                star.style.left = `${Math.random() * 100}vw`;
+                star.style.top = `${Math.random() * 100}vh`;
+
+                // 随机大小
+                const size = Math.random() * 3;
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+
+                // 随机动画参数
+                star.style.setProperty('--duration', `${Math.random() * 8 + 2}s`);
+                star.style.setProperty('--delay', `${Math.random() * 5}s`);
+
+                starsContainer.appendChild(star);
+            }
+
+            // 移除元素标签
+            const removeTags = document.querySelectorAll('.element-tag i.fas.fa-times-circle');
+            removeTags.forEach(tag => {
+                tag.addEventListener('click', function (e) {
+                    this.parentElement.remove();
+                });
+            });
+
+            // 添加元素标签
+            const addTags = document.querySelectorAll('.element-tag i.fas.fa-plus-circle');
+            addTags.forEach(tag => {
+                tag.addEventListener('click', function (e) {
+                    const parentTag = this.parentElement;
+                    const elementType = parentTag.parentElement.previousElementSibling.textContent.trim();
+                    
+                    // 创建输入框
+                    const input = document.createElement('input');
+                    input.type = 'text';
+                    input.placeholder = `添加${elementType}`;
+                    input.classList.add('form-input');
+                    input.style.marginBottom = '10px';
+                    
+                    // 替换加号标签
+                    parentTag.parentElement.appendChild(input);
+                    parentTag.remove();
+                    
+                    // 添加事件监听
+                    input.addEventListener('keydown', function (e) {
+                        if (e.key === 'Enter' && this.value.trim() !== '') {
+                            const newTag = document.createElement('div');
+                            newTag.className = 'element-tag';
+                            newTag.innerHTML = `
+                                ${this.value.trim()} <i class="fas fa-times-circle"></i>
+                            `;
+                            
+                            // 添加到标签容器
+                            this.parentElement.insertBefore(newTag, this);
+                            
+                            // 为新标签添加删除事件
+                            newTag.querySelector('i.fas.fa-times-circle').addEventListener('click', function (e) {
+                                this.parentElement.remove();
+                            });
+                            
+                            // 移除输入框
+                            this.parentElement.removeChild(this);
+                            
+                            // 重新添加加号标签
+                            const addTagContainer = document.createElement('div');
+                            addTagContainer.className = 'element-tag';
+                            addTagContainer.innerHTML = `
+                                <i class="fas fa-plus-circle"></i> 添加${elementType}
+                            `;
+                            
+                            this.parentElement.appendChild(addTagContainer);
+                            
+                            // 为新加号标签添加事件
+                            addTagContainer.querySelector('i.fas.fa-plus-circle').addEventListener('click', function (e) {
+                                // 递归调用
+                                this.parentElement.parentElement.querySelector('.element-tag:last-child').click();
+                            });
+                        }
+                    });
+                });
+            });
+
+            // 表单提交功能
+            const analysisForm = document.querySelector('.journal-form');
+            if (analysisForm) {
+                analysisForm.addEventListener('submit', function (e) {
+                    e.preventDefault();
+                    alert('即将跳转支付页面，支付成功后将获得专业梦境解析报告！');
+                    // 实际项目中这里应该有AJAX请求发送表单数据
+                });
+            }
+
+            // 书籍购买按钮
+            const bookButtons = document.querySelectorAll('.book-button');
+            bookButtons.forEach(button => {
+                button.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    alert('即将跳转购买页面！');
+                    // 实际项目中这里应该有AJAX请求发送购买数据
+                });
+            });
+        });
+    </script>
+</body>
+</html>
